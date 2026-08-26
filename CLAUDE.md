@@ -25,6 +25,14 @@ This is a Task Management API (Tasks + Users + Auth) built with Node.js, TypeScr
   - Use kebab-case for the description, and keep it specific to what the branch actually does — not the ticket number alone, not "fixes" or "updates".
 - **One branch per context.** Each distinct implementation (a feature, a fix, a refactor) gets its own branch scoped to that piece of work — don't pile unrelated changes from different tasks onto the same branch. If a session's work naturally splits into unrelated concerns, branch accordingly rather than bundling them.
 
+## SDLC stages
+
+Upcoming work is tracked as Epics and User Stories in a local, adapted copy of Docket Agentic SDLC (github.com/compadrejunior/docket-pub) — the upstream repository is never modified. This project's own 5-stage SDLC, **Plan → Build → Test → PR → Deploy**, is authoritative and locally overrides Docket's stock flow; see [docs/project/SDLC.md](docs/project/SDLC.md) for the full definition. A story's stage is never a frontmatter field — it's which folder it sits in under `docs/stories/` (`1. PLAN` through `6. ARCHIVED`), regenerated into `docs/project/DASHBOARD.md`/`ROADMAP.md` by `node scripts/pm/generate-dashboard.mjs`. Move stories with the `/story-start`, `/story-advance`, and `/story-done` skills — never by hand-editing the generated dashboard/roadmap/metrics files.
+
+## Docker
+
+Both the API and MongoDB run as containers in every environment — dev, test, and prod — via a shared `docker-compose.yml` base plus a `docker-compose.<env>.yml` override (see [docs/setup.md](docs/setup.md#running-with-docker) for the exact commands). The multi-stage `Dockerfile`'s `build` target must keep the full `node_modules` (including devDependencies), since the dev and test overrides both run from that target rather than the slimmer production `runtime` target — don't prune devDependencies out of `build` when touching the Dockerfile.
+
 ## Adding a feature
 
 Use the `add-feature` skill (`.claude/skills/add-feature/SKILL.md`) — it walks through the layer-by-layer checklist (domain → application → infrastructure → presentation → composition → tests → docs) so new work follows the same structure as the existing code instead of improvising a shortcut through the layers.
@@ -33,5 +41,7 @@ Use the `add-feature` skill (`.claude/skills/add-feature/SKILL.md`) — it walks
 
 - [docs/architecture.md](docs/architecture.md) — layering, dependency-inversion rationale, why the native MongoDB driver over Mongoose, why Zod stays at the boundary, authorization model
 - [docs/api-reference.md](docs/api-reference.md) — endpoints and error codes
-- [docs/setup.md](docs/setup.md) — env vars, install/run/build commands, how to promote a user to admin
-- [docs/testing.md](docs/testing.md) — test structure, coverage policy, dual-layer hook enforcement
+- [docs/setup.md](docs/setup.md) — env vars, install/run/build commands, how to promote a user to admin, Docker usage
+- [docs/testing.md](docs/testing.md) — test structure, coverage policy, three-layer enforcement (husky, Claude Code hook, CI)
+- [docs/project/SDLC.md](docs/project/SDLC.md) — this project's 5-stage SDLC and its Docket-based tracking
+- [docs/project/epics.md](docs/project/epics.md) — canonical epic taxonomy for the story backlog

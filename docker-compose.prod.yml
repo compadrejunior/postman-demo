@@ -1,0 +1,15 @@
+services:
+  api:
+    build:
+      target: runtime
+    environment:
+      NODE_ENV: production
+    restart: unless-stopped
+
+  mongo:
+    restart: unless-stopped
+    volumes:
+      - mongo-data-prod:/data/db
+
+volumes:
+  mongo-data-prod:

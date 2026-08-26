@@ -1,0 +1,21 @@
+services:
+  api:
+    build:
+      target: build
+    environment:
+      NODE_ENV: test
+      # mongodb-memory-server auto-detects the OS to pick a binary; Debian's own
+      # arm64 packages don't cover every point release, but Ubuntu's do — forcing
+      # this distro keeps the download working on both amd64 and arm64 hosts.
+      MONGOMS_DISTRO: ubuntu-22.04
+    command: npm run test:coverage
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  mongo:
+    volumes:
+      - mongo-data-test:/data/db
+
+volumes:
+  mongo-data-test:
