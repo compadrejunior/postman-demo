@@ -1,0 +1,30 @@
+{
+  "name": "postman-demo",
+  "version": "1.0.0",
+  "description": "The simplest Task Management API for Postman Demos",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/compadrejunior/postman-demo.git"
+  },
+  "keywords": [
+    "Postman",
+    "API",
+    "Task"
+  ],
+  "author": "José Compadre Junior",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/compadrejunior/postman-demo/issues"
+  },
+  "homepage": "https://github.com/compadrejunior/postman-demo#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.11"
+  }
+}
