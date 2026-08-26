@@ -18,14 +18,14 @@ gantt
     dateFormat YYYY-MM-DD
     axisFormat %b %d
     title Remaining work (projected)
-    section Docker & Deploy Infrastructure
-    Add multi-stage Dockerfile and .dockerignore (M) :active, 2026-08-26, 2026-08-29
-    Add docker-compose base + dev/test/prod overrides (M) :active, 2026-08-29, 2026-09-01
-    Document Docker workflows in docs/setup.md and README (S) :active, 2026-09-01, 2026-09-02
     section CI Pipeline
-    Add GitHub Actions CI workflow (lint/test/build) (S) :active, 2026-09-02, 2026-09-03
-    Add Docker image build/smoke-test job to CI (S) :active, 2026-09-03, 2026-09-04
-    Enable branch protection requiring CI to pass before merge (S) :active, 2026-09-04, 2026-09-05
+    Enable branch protection requiring CI to pass before merge (S) :active, 2026-08-26, 2026-08-27
+    Add GitHub Actions CI workflow (lint/test/build) (S) :active, 2026-09-03, 2026-09-04
+    Add Docker image build/smoke-test job to CI (S) :active, 2026-09-04, 2026-09-05
+    section Docker & Deploy Infrastructure
+    Add multi-stage Dockerfile and .dockerignore (M) :active, 2026-08-27, 2026-08-30
+    Add docker-compose base + dev/test/prod overrides (M) :active, 2026-08-30, 2026-09-02
+    Document Docker workflows in docs/setup.md and README (S) :active, 2026-09-02, 2026-09-03
     section Project Process Adoption
     Adopt local Docket SDLC scaffolding (5-stage flow) (L) :active, 2026-09-05, 2026-09-10
     Add story-advance skill and adapt generation scripts for 6-folder scheme (M) :active, 2026-09-10, 2026-09-13

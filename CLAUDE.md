@@ -24,6 +24,7 @@ This is a Task Management API (Tasks + Users + Auth) built with Node.js, TypeScr
   - `release/<version>` — release stabilization branches
   - Use kebab-case for the description, and keep it specific to what the branch actually does — not the ticket number alone, not "fixes" or "updates".
 - **One branch per context.** Each distinct implementation (a feature, a fix, a refactor) gets its own branch scoped to that piece of work — don't pile unrelated changes from different tasks onto the same branch. If a session's work naturally splits into unrelated concerns, branch accordingly rather than bundling them.
+- **Only open a PR when the work is actually complete.** Before opening a PR: all the code for the change is written, `npm run test:coverage` passes at or above the 90% floor, and every doc the change touches is updated (`docs/api-reference.md` for new/changed endpoints, `docs/architecture.md` for structural changes, `docs/setup.md`/`README.md` for new setup/run steps, `docs/project/epics.md` and the relevant `docs/stories/**` file for tracked work). Don't open a PR to "checkpoint" partial or WIP work, and don't treat "docs later" as acceptable — a PR with code but stale docs is not done. If a piece of planned work genuinely isn't finished, leave its story in `2. BUILD` (or earlier) rather than advancing it or including it in a PR.
 
 ## SDLC stages
 
