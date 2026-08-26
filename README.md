@@ -53,6 +53,23 @@ cp .env.example .env   # fill in real values, see docs/setup.md
 npm run dev
 ```
 
+## Docker quickstart
+
+Both the API and MongoDB run as containers in dev, test, and prod, each environment with its own isolated Mongo data volume:
+
+```bash
+# Dev — hot reload, bind-mounted source
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+# Test — clean-room, CI-parity run of the full test suite
+docker compose -f docker-compose.yml -f docker-compose.test.yml run --rm api
+
+# Prod — the production-shaped deployment
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
+See [docs/setup.md](docs/setup.md#running-with-docker) for details.
+
 ## Scripts
 
 | Command | Purpose |
@@ -65,13 +82,21 @@ npm run dev
 | `npm run test:coverage` | Run tests with coverage; must pass the 90% floor before committing |
 | `npm run lint` | Lint the codebase |
 | `npm run format` | Format with Prettier |
+| `npm run pm:dashboard` | Regenerate the story dashboard/roadmap/metrics from `docs/stories/` |
+| `npm run pm:check` | Validate the story backlog (stale/hand-edited generated files, bad epics, dependency cycles) |
 
 ## Documentation
 
 - [docs/architecture.md](docs/architecture.md) — Clean Architecture layering, dependency-inversion rationale, why the native MongoDB driver over Mongoose, why Zod stays at the boundary, authorization model
 - [docs/api-reference.md](docs/api-reference.md) — endpoints, request/response shapes, status codes
-- [docs/setup.md](docs/setup.md) — environment variables, install/run/build/test commands, promoting a user to admin
-- [docs/testing.md](docs/testing.md) — test structure, coverage policy, dual-layer hook enforcement, how to add tests for a new feature
+- [docs/setup.md](docs/setup.md) — environment variables, install/run/build/test commands, promoting a user to admin, running with Docker
+- [docs/testing.md](docs/testing.md) — test structure, coverage policy, three-layer enforcement (husky, Claude Code hook, CI), how to add tests for a new feature
+- [docs/project/SDLC.md](docs/project/SDLC.md) — this project's 5-stage SDLC (Plan → Build → Test → PR → Deploy) and its Docket-based story tracking
+- [docs/project/epics.md](docs/project/epics.md) — canonical epic taxonomy for the story backlog
+
+## Process & SDLC
+
+Upcoming work is tracked as Epics and User Stories in `docs/stories/`, using a local, adapted copy of [Docket Agentic SDLC](https://github.com/compadrejunior/docket-pub) (the upstream repo is never modified). This project's own **Plan → Build → Test → PR → Deploy** flow, defined in [docs/project/SDLC.md](docs/project/SDLC.md), is authoritative. A story's stage is which folder it's in — never a hand-authored field — and `docs/project/DASHBOARD.md`/`ROADMAP.md` are regenerated from it via `npm run pm:dashboard` or the `/pm-dashboard` skill. Move stories forward with `/story-start`, `/story-advance`, and `/story-done`.
 
 ## Working on this project (for contributors and AI agents)
 
@@ -80,7 +105,7 @@ This repo is set up to be worked on by Claude Code, so the rules below apply to 
 - **[CLAUDE.md](CLAUDE.md)** is the source of truth for non-negotiable rules (dependency direction, Zod boundary, authorization-as-domain-rule, 90% coverage floor, TypeScript strictness) and the Gitflow branch-naming convention (`feature/`, `bugfix/`, `hotfix/`, `release/`). Read it before making structural changes.
 - **Adding a feature?** Use the `add-feature` Claude Code skill (`.claude/skills/add-feature/SKILL.md`) — it walks through the layer-by-layer checklist (domain → application → infrastructure → presentation → composition → tests → docs) instead of improvising a shortcut through the layers.
 - **Never commit directly to `master`.** All work — human or agent — goes on a branch and gets merged via PR.
-- **Coverage is enforced twice**: a `.husky/pre-commit` hook runs `npm run test:coverage`, and a Claude Code `PreToolUse` hook (`.claude/settings.json`, `.claude/hooks/check-before-commit.sh`) backs it up on `git commit`.
+- **Coverage is enforced three times**: a `.husky/pre-commit` hook runs `npm run test:coverage`, a Claude Code `PreToolUse` hook (`.claude/settings.json`, `.claude/hooks/check-before-commit.sh`) backs it up on `git commit`, and GitHub Actions CI (`.github/workflows/ci.yml`) enforces it on every PR regardless of how the commit was made.
 
 ### Non-negotiable rules
 

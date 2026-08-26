@@ -1,0 +1,15 @@
+node_modules
+dist
+coverage
+.git
+.github
+.husky
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+docs/project
+docs/stories
+.vscode
+.idea

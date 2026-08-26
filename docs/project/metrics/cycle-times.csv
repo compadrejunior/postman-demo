@@ -1,0 +1,5 @@
+size,points_baseline,samples,median_days,mean_days,min_days,max_days,basis,days_per_point
+S,1,0,,,,,default,1
+M,3,0,,,,,default,1
+L,5,0,,,,,default,1
+XL,8,0,,,,,default,1

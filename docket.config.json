@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "product": {
+    "name": "Task Management API",
+    "titleScrubRegex": null
+  },
+  "paths": {
+    "docs": "docs",
+    "stories": "docs/stories",
+    "project": "docs/project"
+  },
+  "jira": {
+    "enabled": false
+  },
+  "confluence": {
+    "enabled": false
+  },
+  "repository": {
+    "provider": "github",
+    "baseBranch": "master"
+  }
+}

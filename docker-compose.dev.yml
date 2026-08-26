@@ -1,0 +1,19 @@
+services:
+  api:
+    build:
+      target: build
+    environment:
+      NODE_ENV: development
+    command: npm run dev
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+    ports:
+      - "${PORT:-3000}:3000"
+
+  mongo:
+    volumes:
+      - mongo-data-dev:/data/db
+
+volumes:
+  mongo-data-dev:

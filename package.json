@@ -4,6 +4,9 @@
   "description": "The simplest Task Management API for Postman Demos",
   "type": "module",
   "main": "dist/index.js",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.build.json",
@@ -13,6 +16,8 @@
     "test:coverage": "vitest run --coverage",
     "lint": "eslint .",
     "format": "prettier --write .",
+    "pm:dashboard": "node scripts/pm/generate-dashboard.mjs",
+    "pm:check": "node scripts/pm/check-docs.mjs",
     "prepare": "husky"
   },
   "repository": {
