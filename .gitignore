@@ -3,3 +3,7 @@ node_modules
 
 ## Environment Variables
 .env
+
+## Build & test output
+dist
+coverage
