@@ -2,6 +2,22 @@ $kind: http-request
 method: POST
 url: '{{base_url}}/auth/register'
 order: 1000
+description: |-
+  Registers a new user. Always creates a `"user"` role — there is no self-service way to become an admin (see docs/setup.md).
+
+  **Auth required:** no.
+
+  **Body**
+
+  | Field    | Type   | Notes                       |
+  |----------|--------|------------------------------|
+  | name     | string | required, non-empty         |
+  | email    | string | required, valid email       |
+  | password | string | required, min 8 characters  |
+
+  **Response `201`:** `{ "id", "name", "email", "role" }`
+
+  **Errors:** `400` invalid body, `409` email already registered.
 headers:
   - key: Content-Type
     value: application/json

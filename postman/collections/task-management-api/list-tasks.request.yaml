@@ -2,6 +2,14 @@ $kind: http-request
 method: GET
 url: '{{base_url}}/tasks'
 order: 4000
+description: |-
+  Lists the caller's own tasks. Requires `auth_token` to be set — run Login first.
+
+  **Auth required:** yes.
+
+  **Params/Body:** none.
+
+  **Response `200`:** array of tasks (id, userId, title, description, status, priority, dueDate, createdAt, updatedAt).
 headers:
   - key: Authorization
     value: 'Bearer {{auth_token}}'

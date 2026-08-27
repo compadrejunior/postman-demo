@@ -1,0 +1,14 @@
+name: Production
+values:
+  - key: base_url
+    value: 'http://localhost:3002/api'
+    type: default
+    enabled: true
+  - key: auth_token
+    value: ''
+    type: secret
+    enabled: true
+  - key: task_id
+    value: ''
+    type: default
+    enabled: true
