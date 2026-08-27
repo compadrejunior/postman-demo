@@ -1,3 +1,7 @@
+# Override file — has no image/build context of its own for `mongo`. Never run this
+# file alone (it will fail with "service mongo has neither an image nor a build
+# context specified"); use `npm run docker:prod`, or `docker compose -f
+# docker-compose.yml -f docker-compose.prod.yml up -d`.
 services:
   api:
     build:

@@ -50,21 +50,27 @@ Requirements above). To run both the API and MongoDB together, use Docker instea
 
 Both the API and MongoDB run as containers in every environment (dev/test/prod), each
 with its own isolated named volume for Mongo data. All three use a shared base
-`docker-compose.yml` plus an environment-specific override file.
+`docker-compose.yml` plus an environment-specific override file — `docker-compose.dev.yml`
+/ `.test.yml` / `.prod.yml` have no `image`/`build` of their own for `mongo` and **will
+fail if run without the base file** (`service "mongo" has neither an image nor a build
+context specified`). Use the `npm run docker:*` scripts below, which always pass both
+files correctly, rather than invoking `docker compose` directly against one override file.
 
 **Dev** — hot reload, bind-mounted source:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+npm run docker:dev
+# equivalent to: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 ```
 
 The API is reachable at `http://localhost:3000` (or `$PORT`); editing files under `src/`
-or `tests/` restarts the process automatically.
+or `tests/` restarts the process automatically. Stop it with `npm run docker:dev:down`.
 
 **Test** — a clean-room, CI-parity run of the full test suite inside a container:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.test.yml run --rm api
+npm run docker:test
+# equivalent to: docker compose -f docker-compose.yml -f docker-compose.test.yml run --rm api
 ```
 
 This runs `npm run test:coverage` against the exact image contents, with no bind mounts.
@@ -75,10 +81,12 @@ anyone who wants to point manual checks at a real MongoDB instance.
 **Prod** — the production-shaped deployment:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+npm run docker:prod
+# equivalent to: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
 Runs the compiled `runtime` image as a non-root user with `restart: unless-stopped`.
+Stop it with `npm run docker:prod:down`.
 
 In every Docker environment, `MONGODB_URI` is overridden by the base compose file to
 point at the `mongo` service (`mongodb://mongo:27017/task-management`) rather than

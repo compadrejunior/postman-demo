@@ -1,3 +1,6 @@
+# Override file — has no image/build context of its own for `mongo`. Never run this
+# file alone; use `npm run docker:test`, or `docker compose -f docker-compose.yml
+# -f docker-compose.test.yml run --rm api`.
 services:
   api:
     build:
