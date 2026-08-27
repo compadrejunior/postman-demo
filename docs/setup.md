@@ -108,6 +108,18 @@ point at the `mongo` service (`mongodb://mongo:27017/task-management`) rather th
 `localhost` — the value in your `.env`/`.env.test`/`.env.prod` file only takes effect
 when running the API directly on the host, outside Compose.
 
+## Seeding data for manual Postman testing
+
+`npm run seed:dev` / `seed:test` / `seed:prod` wipe the `users`/`tasks` collections in the target database and insert a fixed dataset: three users (`ada@example.com` / `password123`, `grace@example.com` / `password123`, and an admin `admin@example.com` / `adminpass123`) and six tasks across a range of statuses, priorities, and due dates — including tasks owned by Grace so Ada's token can be used to exercise the `403` ownership-check paths on Get/Update/Delete Task. `ada@example.com` / `password123` matches the sample body already committed in the Login/Register requests in `postman/collections/task-management-api/`, so the collection works against seeded data with no edits.
+
+Run these against an API reachable directly on the host (`MONGODB_URI` resolves to `localhost`, as in `.env`/`.env.test`/`.env.prod`). When the API and MongoDB run in Docker instead, `MONGODB_URI` is overridden to point at the `mongo` service (see above) — from the host, seed those containers by copying `scripts/seed.ts` (or, for the slim `runtime`/prod image, `scripts/seed.prod.mjs` plus `scripts/seed-data.mjs`) into the running api container and running it there, e.g.:
+
+```bash
+docker cp scripts/seed.ts postman-demo-dev-api-1:/app/scripts/seed.ts
+docker cp scripts/seed-data.mjs postman-demo-dev-api-1:/app/scripts/seed-data.mjs
+docker exec postman-demo-dev-api-1 npx tsx scripts/seed.ts
+```
+
 ## Test
 
 See [docs/testing.md](./testing.md).
