@@ -1,0 +1,101 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Task Management API — Story</title>
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--ink:#1c2530;--muted:#5b6b7d;--line:#e6eaef;--accent:#2f6feb;--good:#1f9d55;--warn:#c47f17;--bad:#c0392b;--hi:#fff4d6}
+@media(prefers-color-scheme:dark){:root{--bg:#0f141a;--card:#161d26;--ink:#e6edf3;--muted:#9fb0c0;--line:#232c37;--accent:#5b8dff;--good:#3fbc7d;--warn:#e0a83c;--bad:#e0685a;--hi:#33302170}}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.6 system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:14px;padding:12px 20px;background:var(--card);border-bottom:1px solid var(--line)}
+.back{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:13px;padding:7px 13px;border-radius:10px;text-decoration:none;cursor:pointer;white-space:nowrap}
+.back:hover{border-color:var(--accent);color:var(--accent)}
+.htitle{font-size:14px;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wrap{max-width:900px;margin:0 auto;padding:28px 22px 80px}
+.md h1{font-size:24px;margin:0 0 14px;line-height:1.25}
+.md h2{font-size:18px;margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.md h3{font-size:15px;margin:22px 0 8px}
+.md p,.md li{color:var(--ink)}
+.md a{color:var(--accent)}
+.md code{background:var(--line);padding:1px 5px;border-radius:4px;font-size:.9em}
+.md pre{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto}
+.md pre code{background:transparent;padding:0}
+.md blockquote{margin:14px 0;padding:6px 16px;border-left:3px solid var(--accent);color:var(--muted);background:var(--card);border-radius:0 8px 8px 0}
+.md table{border-collapse:collapse;width:100%;margin:14px 0;display:block;overflow-x:auto}
+.md th,.md td{border:1px solid var(--line);padding:7px 12px;text-align:left;font-size:14px}
+.md th{background:var(--card);font-weight:600}
+.md hr{border:0;border-top:1px solid var(--line);margin:24px 0}
+.md img{max-width:100%}
+.meta{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:24px;font-size:13px}
+.meta dl{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;margin:0}
+.meta dt{color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-size:11px;align-self:center}
+.meta dd{margin:0;font-variant-numeric:tabular-nums}
+.empty{padding:40px;text-align:center;color:var(--muted)}
+</style></head><body>
+
+<header>
+  <a class="back" id="back" href="backlog.html">&larr; Backlog</a>
+  <span class="htitle" id="htitle">Loading…</span>
+</header>
+
+<div class="wrap">
+  <div id="meta"></div>
+  <article class="md" id="content"><div class="empty">Loading…</div></article>
+</div>
+
+<script src="vendor/marked.min.js"></script>
+<script>
+const STORY_BASE = '../stories/';
+
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+// Pull YAML frontmatter (--- … ---) off the top; return {meta, body}.
+function splitFrontmatter(text){
+  const m = text.match(/^﻿?---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+  if (!m) return {meta: null, body: text};
+  const meta = {};
+  m[1].split(/\r?\n/).forEach(line => {
+    const i = line.indexOf(':');
+    if (i < 0) return;
+    const k = line.slice(0, i).trim();
+    let v = line.slice(i + 1).trim();
+    if (!k) return;
+    meta[k] = v;
+  });
+  return {meta, body: m[2]};
+}
+
+function renderMeta(meta){
+  if (!meta) return '';
+  const order = ['id','title','epic','status','priority','size','mvp','depends_on','started','test_started','pr_opened','deployed','completed'];
+  const keys = order.filter(k => meta[k]);
+  if (!keys.length) return '';
+  const rows = keys.map(k =>
+    `<dt>${esc(k.replace(/_/g,' '))}</dt><dd>${esc(meta[k])}</dd>`).join('');
+  return `<div class="meta"><dl>${rows}</dl></div>`;
+}
+
+function fail(msg){
+  document.getElementById('htitle').textContent = 'Story not found';
+  document.getElementById('content').innerHTML = `<div class="empty">${esc(msg)}</div>`;
+}
+
+const params = new URLSearchParams(location.search);
+const file = params.get('f');
+
+if (!file){
+  fail('No story specified. Open a story from the backlog.');
+} else {
+  fetch(STORY_BASE + encodeURI(file))
+    .then(r => r.ok ? r.text() : Promise.reject(r.status))
+    .then(text => {
+      const {meta, body} = splitFrontmatter(text);
+      const title = (meta && (meta.id || meta.title)) ? [meta.id, meta.title].filter(Boolean).join(' — ') : file;
+      document.title = 'Task Management API — ' + (meta && meta.id ? meta.id : 'Story');
+      document.getElementById('htitle').textContent = title;
+      document.getElementById('meta').innerHTML = renderMeta(meta);
+      document.getElementById('content').innerHTML = marked.parse(body);
+    })
+    .catch(err =>
+      fail(`Could not load story (${err}). This viewer must be served over http(s) — open it via a local server rather than file://.`));
+}
+</script>
+</body></html>

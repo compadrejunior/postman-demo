@@ -25,7 +25,7 @@ xychart-beta
     title "Stories delivered over time"
     x-axis [08-26, 08-27]
     y-axis "Stories" 0 --> 14
-    line [0, 0]
+    line [0, 1]
     line [14, 7]
 ```
 

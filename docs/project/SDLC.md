@@ -12,7 +12,7 @@ This project uses its own 5-stage flow — **Plan → Build → Test → PR → 
 
 ## Story status is derived, not declared
 
-As in stock Docket, a story's status is which folder it physically sits in under `docs/stories/` — never a hand-authored `status:` frontmatter field. `scripts/pm/generate-dashboard.mjs` derives status this way and regenerates `docs/project/DASHBOARD.md`, `docs/project/ROADMAP.md`, and the metrics CSVs from folder location + frontmatter on every run. See `.claude/rules/stories-and-plans.md` for the full frontmatter contract.
+As in stock Docket, a story's status is which folder it physically sits in under `docs/stories/` — never a hand-authored `status:` frontmatter field. `scripts/pm/generate-dashboard.mjs` derives status this way and regenerates `docs/project/DASHBOARD.md`, `docs/project/ROADMAP.md`, `docs/project/dashboard.html`, the metrics CSVs, and `docs/project/backlog.html`'s inline CSV copy from folder location + frontmatter on every run. See `.claude/rules/stories-and-plans.md` for the full frontmatter contract.
 
 ## Relationship to Docker environments
 
@@ -26,7 +26,7 @@ As in stock Docket, a story's status is which folder it physically sits in under
 - `/story-start` — Plan → Build.
 - `/story-advance` — Build → Test, Test → PR, or PR → Deploy (one stage forward at a time).
 - `/story-done` — Deploy → Archived, the final closure.
-- `/pm-dashboard` — regenerate `DASHBOARD.md`, `ROADMAP.md`, and the metrics CSVs from the story backlog; run after any story move.
+- `/pm-dashboard` — regenerate `DASHBOARD.md`, `ROADMAP.md`, `dashboard.html`, the metrics CSVs, and `backlog.html`'s inline CSV copy from the story backlog; run after any story move.
 - `npm run pm:dashboard` / `npm run pm:check` — the same generation/validation, runnable without Claude Code.
 
 ## Branch protection

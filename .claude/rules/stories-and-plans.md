@@ -119,10 +119,12 @@ taxonomy from sprawling into near-duplicate names.
 
 ## Never hand-edit generated files
 
-`docs/project/DASHBOARD.md`, `docs/project/ROADMAP.md`, and everything under
-`docs/project/metrics/` are generated. The validator re-derives them in memory and
+`docs/project/DASHBOARD.md`, `docs/project/ROADMAP.md`, `docs/project/dashboard.html`,
+everything under `docs/project/metrics/`, and `docs/project/backlog.html`'s inline
+`<script id="csv">` block are generated. The validator re-derives them in memory and
 byte-compares, so a hand-edit is indistinguishable from staleness and both are rejected.
-Fix the source and regenerate.
+Fix the source and regenerate. (`backlog.html` and `story.html` themselves are static
+viewers, not regenerated — only backlog.html's inline CSV fallback is patched in place.)
 
 ## Git and deploy actions stay explicit
 

@@ -1,0 +1,328 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Task Management API — Backlog</title>
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--ink:#1c2530;--muted:#5b6b7d;--line:#e6eaef;--accent:#2f6feb;--good:#1f9d55;--warn:#c47f17;--bad:#c0392b;--hi:#fff4d6}
+@media(prefers-color-scheme:dark){:root{--bg:#0f141a;--card:#161d26;--ink:#e6edf3;--muted:#9fb0c0;--line:#232c37;--accent:#5b8dff;--good:#3fbc7d;--warn:#e0a83c;--bad:#e0685a;--hi:#33302170}}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.5 system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:22px;margin:0 0 4px}
+.sub{color:var(--muted);font-size:13px;margin-bottom:22px}
+.cards{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;flex:1;min-width:140px}
+.card h3{margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.card b{font-size:26px;line-height:1.2;display:block}
+.card small{color:var(--muted);font-size:12px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.seg{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;padding:7px 14px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--accent);color:#fff}
+input[type=search]{flex:1;min-width:180px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;color:var(--ink);font:inherit;font-size:13px}
+.lbl{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.linkbtn{border:1px solid var(--line);background:var(--card);color:var(--muted);font:inherit;font-size:13px;padding:7px 12px;border-radius:10px;cursor:pointer}
+.linkbtn:hover{color:var(--ink)}
+details.group{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+details.group>summary{list-style:none;cursor:pointer;padding:13px 16px;display:flex;align-items:center;gap:12px;user-select:none}
+details.group>summary::-webkit-details-marker{display:none}
+.caret{transition:transform .15s;color:var(--muted);font-size:11px}
+details[open]>summary .caret{transform:rotate(90deg)}
+.gname{font-weight:600;font-size:14px;flex:1}
+.gmeta{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.track{display:inline-block;width:110px;height:7px;border-radius:6px;background:var(--line);overflow:hidden;vertical-align:middle}
+.fill{height:100%;background:var(--good)}
+.tw{overflow-x:auto}
+table{width:100%;min-width:860px;border-collapse:collapse;table-layout:fixed}
+th,td{padding:9px 14px;text-align:left;border-top:1px solid var(--line);font-size:13.5px;vertical-align:top}
+th{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;white-space:nowrap}
+td.id{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
+td.id a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--muted)}
+tr.row:target,tr.row.flash{background:var(--hi)}
+.chip{display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:20px;background:var(--line);color:var(--ink);white-space:nowrap;line-height:1.6}
+.chip.hi{background:rgba(192,57,43,.14);color:var(--bad)}
+.chip.md{background:rgba(196,127,23,.16);color:var(--warn)}
+.chip.lo{background:rgba(31,157,85,.14);color:var(--good)}
+.chip.plan{background:rgba(47,111,235,.12);color:var(--accent)}
+.chip.build{background:rgba(196,127,23,.16);color:var(--warn)}
+.chip.test{background:rgba(196,127,23,.16);color:var(--warn)}
+.chip.pr{background:rgba(196,127,23,.16);color:var(--warn)}
+.chip.deploy{background:rgba(31,157,85,.14);color:var(--good)}
+.chip.arch{background:var(--line);color:var(--muted)}
+.chip.blocked{background:rgba(192,57,43,.14);color:var(--bad)}
+.chip.ready{background:rgba(31,157,85,.14);color:var(--good)}
+.dep{display:inline-block;font-size:10.5px;padding:1px 7px;margin:1px 3px 1px 0;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--muted);text-decoration:none;font-variant-numeric:tabular-nums;cursor:pointer}
+.dep:hover{color:var(--ink);border-color:var(--accent)}
+.dep.open{color:var(--bad);border-color:rgba(192,57,43,.4)}
+.dash{color:var(--muted)}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+.foot{color:var(--muted);font-size:12px;margin-top:22px;line-height:1.7}
+.foot code{background:var(--line);padding:1px 5px;border-radius:4px}
+@media(max-width:760px){.wrap{padding:20px 12px 40px}}
+</style></head><body><div class="wrap">
+
+<h1>Task Management API — Backlog</h1>
+<div class="sub" id="sub">Loading…</div>
+
+<div class="cards" id="kpis"></div>
+
+<div class="controls">
+  <span class="lbl">Group by</span>
+  <div class="seg" id="groupby">
+    <button data-g="epic" aria-pressed="true">Epic</button>
+    <button data-g="priority" aria-pressed="false">Priority</button>
+    <button data-g="status" aria-pressed="false">Status</button>
+  </div>
+  <span class="lbl">Show</span>
+  <div class="seg" id="scope">
+    <button data-s="pending" aria-pressed="true">Pending</button>
+    <button data-s="all" aria-pressed="false">All stories</button>
+  </div>
+  <span class="lbl">MVP</span>
+  <div class="seg" id="mvp">
+    <button data-m="all" aria-pressed="true">All</button>
+    <button data-m="yes" aria-pressed="false">MVP</button>
+    <button data-m="no" aria-pressed="false">Non-MVP</button>
+  </div>
+  <input type="search" id="q" placeholder="Search story, ID, epic…">
+  <button class="linkbtn" id="expand">Expand all</button>
+  <button class="linkbtn" id="collapse">Collapse all</button>
+</div>
+
+<div id="groups"></div>
+
+<p class="foot">
+  <b>Generated — do not hand-edit this page or its CSV.</b> The source of truth is each story's own frontmatter in
+  <code>docs/stories/</code> (its folder = its stage: Plan → Build → Test → PR → Deploy → Archived). Change a story, then run
+  <code>node scripts/pm/generate-dashboard.mjs</code> to refresh <code>metrics/backlog.csv</code> and this view.<br>
+  <b>Depends On</b> (<code>depends_on:</code> in the story's frontmatter) = stories this one needs <i>first</i>.
+  <b>Depended By</b> = stories that need <i>this</i> one — computed as the exact inverse, never authored.
+  Only <b>Depends On</b> can block: a pending story is <b>Blocked</b> when any story it depends on has not reached
+  Deploy or Archived, and <b>Ready</b> when they all have.
+  Dependency chips are clickable — they jump to the linked story (switch to "All stories" to land on shipped ones).<br>
+  Epics per <code>docs/project/epics.md</code> · points: S=1, M=3, L=5, XL=8 · companion to <code>dashboard.html</code> ·
+  validate with <code>node scripts/pm/check-docs.mjs</code>.
+</p>
+</div>
+
+<script id="csv" type="text/plain">
+id,title,epic,epic_no,status,priority,size,points,mvp,ready,depends_on,depended_by,started,test_started,pr_opened,deployed,completed,files
+US-012,Enable branch protection requiring CI to pass before merge,CI Pipeline,4,Deploy,Medium,S,1,No,Yes,US-010,,2026-08-26,2026-08-27,2026-08-27,2026-08-27,,5. DEPLOY/US-012_branch-protection-ci-required.md
+US-001,Add JWT refresh token endpoint,Auth Enhancements,1,Plan,High,M,3,Yes,Yes,,US-002;US-003,,,,,,1. PLAN/US-001_add-jwt-refresh-token-endpoint.md
+US-004,Add pagination to task list endpoints,Task Query Enhancements,2,Plan,High,M,3,Yes,Yes,,US-005;US-006,,,,,,1. PLAN/US-004_task-list-pagination.md
+US-002,Support multiple concurrent refresh tokens per user,Auth Enhancements,1,Plan,Medium,M,3,No,No,US-001,,,,,,,1. PLAN/US-002_multi-device-refresh-tokens.md
+US-003,Revoke all sessions endpoint,Auth Enhancements,1,Plan,Medium,S,1,No,No,US-001,,,,,,,1. PLAN/US-003_revoke-all-sessions-endpoint.md
+US-005,Add status/priority filtering to task list endpoints,Task Query Enhancements,2,Plan,Medium,M,3,No,No,US-004,,,,,,,1. PLAN/US-005_task-list-filtering.md
+US-006,Add sort ordering to task list endpoints,Task Query Enhancements,2,Plan,Low,S,1,No,No,US-004,,,,,,,1. PLAN/US-006_task-list-sorting.md
+US-007,Add multi-stage Dockerfile and .dockerignore,Docker & Deploy Infrastructure,3,Archived,High,M,3,Yes,Yes,,US-008;US-011,2026-08-26,2026-08-26,2026-08-26,2026-08-26,2026-08-26,6. ARCHIVED/US-007_dockerfile-and-dockerignore.md
+US-008,Add docker-compose base + dev/test/prod overrides,Docker & Deploy Infrastructure,3,Archived,High,M,3,Yes,Yes,US-007,US-009,2026-08-26,2026-08-26,2026-08-26,2026-08-26,2026-08-26,6. ARCHIVED/US-008_docker-compose-dev-test-prod.md
+US-010,Add GitHub Actions CI workflow (lint/test/build),CI Pipeline,4,Archived,High,S,1,Yes,Yes,,US-011;US-012,2026-08-26,2026-08-26,2026-08-26,2026-08-26,2026-08-26,6. ARCHIVED/US-010_ci-workflow-lint-test-build.md
+US-013,Adopt local Docket SDLC scaffolding (5-stage flow),Project Process Adoption,5,Archived,High,L,5,Yes,Yes,,US-014,2026-08-26,2026-08-26,2026-08-26,2026-08-26,2026-08-26,6. ARCHIVED/US-013_adopt-docket-sdlc-scaffolding.md
+US-014,Add story-advance skill and adapt generation scripts for 6-folder scheme,Project Process Adoption,5,Archived,High,M,3,Yes,Yes,US-013,,2026-08-26,2026-08-26,2026-08-26,2026-08-26,2026-08-26,6. ARCHIVED/US-014_story-advance-skill-and-scripts.md
+US-009,Document Docker workflows in docs/setup.md and README,Docker & Deploy Infrastructure,3,Archived,Medium,S,1,No,Yes,US-008,,2026-08-26,2026-08-26,2026-08-26,2026-08-26,2026-08-26,6. ARCHIVED/US-009_document-docker-workflows.md
+US-011,Add Docker image build/smoke-test job to CI,CI Pipeline,4,Archived,Medium,S,1,No,Yes,US-007;US-010,,2026-08-26,2026-08-26,2026-08-26,2026-08-26,2026-08-26,6. ARCHIVED/US-011_ci-docker-build-smoke-test.md
+</script>
+
+<script>
+const STATUS_ORDER = {'Build':0,'Test':1,'PR':2,'Deploy':3,'Plan':4,'Archived':5};
+const PRIO_ORDER   = {'High':0,'Medium':1,'Low':2,'':3};
+const PENDING = new Set(['Plan','Build','Test','PR']);
+const DELIVERED = new Set(['Deploy','Archived']);
+
+let ROWS = [], BY_ID = {}, state = {group:'epic', scope:'pending', mvp:'all', q:''};
+
+function parseCSV(text){
+  const lines = text.trim().split(/\r?\n/);
+  const head = lines.shift().split(',');
+  return lines.filter(l => l.trim()).map(line => {
+    const cells = []; let cur = '', quoted = false;
+    for (let i = 0; i < line.length; i++){
+      const c = line[i];
+      if (quoted){
+        if (c === '"' && line[i+1] === '"'){ cur += '"'; i++; }
+        else if (c === '"'){ quoted = false; }
+        else cur += c;
+      } else if (c === '"'){ quoted = true; }
+      else if (c === ','){ cells.push(cur); cur = ''; }
+      else cur += c;
+    }
+    cells.push(cur);
+    const o = {};
+    head.forEach((h, i) => o[h.trim()] = (cells[i] || '').trim());
+    o.depends_on   = o.depends_on   ? o.depends_on.split(';').map(s => s.trim()).filter(Boolean) : [];
+    o.depended_by  = o.depended_by  ? o.depended_by.split(';').map(s => s.trim()).filter(Boolean) : [];
+    o.points = Number(o.points) || 0;
+    o.epic_no = Number(o.epic_no) || 99;
+    o.file = (o.files || '').split('|')[0].trim();
+    return o;
+  });
+}
+
+const isDelivered = id => BY_ID[id] && DELIVERED.has(BY_ID[id].status);
+const isPending   = r  => PENDING.has(r.status);
+const openDeps    = r  => r.depends_on.filter(d => !isDelivered(d));
+const isBlocked   = r  => isPending(r) && openDeps(r).length > 0;
+
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function renderKPIs(){
+  const pending  = ROWS.filter(isPending);
+  const pts      = rs => rs.reduce((a, r) => a + r.points, 0);
+  const done     = ROWS.filter(r => DELIVERED.has(r.status));
+  const blocked  = pending.filter(isBlocked);
+  const ready    = pending.filter(r => !isBlocked(r));
+  const highPend = pending.filter(r => r.priority === 'High');
+  const total    = done.length + pending.length;
+  const kpis = [
+    ['Pending',   pending.length, `${pts(pending)} pts · ${highPend.length} high priority`],
+    ['Ready now', ready.length,   'no open dependencies'],
+    ['Blocked',   blocked.length, 'waiting on another story'],
+    ['Delivered', done.length,    `${total ? Math.round(done.length / total * 100) : 0}% of active stories`],
+  ];
+  document.getElementById('kpis').innerHTML = kpis.map(([h, n, s]) =>
+    `<div class="card"><h3>${h}</h3><b>${n}</b><small>${esc(s)}</small></div>`).join('');
+  document.getElementById('sub').textContent =
+    `${ROWS.length} story records · ${pending.length} pending · ${done.length} delivered · ` +
+    `${ROWS.filter(r => r.status === 'Archived').length} archived · from metrics/backlog.csv`;
+}
+
+function groupKey(r){
+  if (state.group === 'epic')     return `${String(r.epic_no).padStart(2,'0')}|Epic ${r.epic_no}: ${r.epic}`;
+  if (state.group === 'priority') return `${PRIO_ORDER[r.priority] ?? 3}|${r.priority || 'Unprioritized'}`;
+  return `${STATUS_ORDER[r.status] ?? 9}|${r.status}`;
+}
+
+function depChips(ids){
+  if (!ids.length) return '<span class="dash">—</span>';
+  return ids.map(id => {
+    const r = BY_ID[id];
+    const open = r && !DELIVERED.has(r.status);
+    const title = r ? `${r.title} — ${r.status}` : 'unknown story';
+    return `<a class="dep${open ? ' open' : ''}" href="#r-${id}" title="${esc(title)}" data-jump="${id}">${id}</a>`;
+  }).join('');
+}
+
+function rowHTML(r){
+  const prio = {High:'hi', Medium:'md', Low:'lo'}[r.priority] || 'arch';
+  const st   = {'Plan':'plan', 'Build':'build', 'Test':'test', 'PR':'pr', 'Deploy':'deploy', 'Archived':'arch'}[r.status];
+  const flag = isPending(r)
+    ? (isBlocked(r) ? `<span class="chip blocked">Blocked</span>` : `<span class="chip ready">Ready</span>`)
+    : '';
+  return `<tr class="row" id="r-${r.id}">
+    <td class="id"><a href="story.html?f=${encodeURIComponent(r.file)}" title="${esc(r.file)}">${r.id}</a></td>
+    <td>${esc(r.title)} ${flag}</td>
+    ${state.group === 'epic' ? '' : `<td class="hide-sm">${esc(r.epic)}</td>`}
+    ${state.group === 'priority' ? '' : `<td><span class="chip ${prio}">${r.priority || '—'}</span></td>`}
+    ${state.group === 'status' ? '' : `<td><span class="chip ${st}">${r.status}</span></td>`}
+    <td class="hide-sm">${r.size} · ${r.points}</td>
+    <td class="hide-sm">${r.mvp || '—'}</td>
+    <td>${depChips(r.depends_on)}</td>
+    <td>${depChips(r.depended_by)}</td>
+  </tr>`;
+}
+
+function render(){
+  const q = state.q.toLowerCase();
+  const rows = ROWS
+    .filter(r => state.scope === 'all' ? true : isPending(r))
+    .filter(r => state.mvp === 'all' ? true : (state.mvp === 'yes' ? r.mvp === 'Yes' : r.mvp !== 'Yes'))
+    .filter(r => !q || (r.id + ' ' + r.title + ' ' + r.epic + ' ' + r.status + ' ' + r.priority).toLowerCase().includes(q));
+
+  const groups = {};
+  rows.forEach(r => (groups[groupKey(r)] = groups[groupKey(r)] || []).push(r));
+
+  // Same column set for every group table, so widths line up down the page.
+  const cols = [
+    {h: 'ID', w: '86px'},
+    {h: 'Story', w: 'auto'},
+    state.group === 'epic'     ? null : {h: 'Epic', w: '170px', sm: true},
+    state.group === 'priority' ? null : {h: 'Priority', w: '92px'},
+    state.group === 'status'   ? null : {h: 'Status', w: '84px'},
+    {h: 'Size · Pts', w: '78px', sm: true},
+    {h: 'MVP', w: '56px', sm: true},
+    {h: 'Depends On', w: '148px'},
+    {h: 'Depended By', w: '168px'},
+  ].filter(Boolean);
+  const colGroup = `<colgroup>${cols.map(c => `<col style="width:${c.w}">`).join('')}</colgroup>`;
+  const headHTML = cols.map(c => `<th${c.sm ? ' class="hide-sm"' : ''}>${c.h}</th>`).join('');
+
+  const el = document.getElementById('groups');
+  const keys = Object.keys(groups).sort();
+  if (!keys.length){ el.innerHTML = '<div class="empty">No stories match this filter.</div>'; return; }
+
+  el.innerHTML = keys.map(k => {
+    const list = groups[k].sort((a, b) =>
+      (STATUS_ORDER[a.status] - STATUS_ORDER[b.status]) ||
+      ((PRIO_ORDER[a.priority] ?? 3) - (PRIO_ORDER[b.priority] ?? 3)) ||
+      a.id.localeCompare(b.id));
+    const name    = k.split('|')[1];
+    const pts     = list.reduce((a, r) => a + r.points, 0);
+    const done    = list.filter(r => DELIVERED.has(r.status));
+    const donePts = done.reduce((a, r) => a + r.points, 0);
+    const pct     = pts ? Math.round(donePts / pts * 100) : 0;
+    const blocked = list.filter(isBlocked).length;
+    const meta = state.scope === 'all'
+      ? `<span class="track"><span class="fill" style="width:${pct}%"></span></span> ${pct}% · ${list.length} stories · ${pts} pts`
+      : `${list.length} pending · ${pts} pts${blocked ? ` · <span style="color:var(--bad)">${blocked} blocked</span>` : ''}`;
+    return `<details class="group" open>
+      <summary><span class="caret">▶</span><span class="gname">${esc(name)}</span><span class="gmeta">${meta}</span></summary>
+      <div class="tw"><table>${colGroup}<thead><tr>${headHTML}</tr></thead><tbody>${list.map(rowHTML).join('')}</tbody></table></div>
+    </details>`;
+  }).join('');
+}
+
+function boot(text){
+  ROWS = parseCSV(text);
+  BY_ID = {};
+  ROWS.forEach(r => BY_ID[r.id] = r);
+  renderKPIs();
+  render();
+}
+
+document.getElementById('groupby').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  state.group = b.dataset.g;
+  [...e.currentTarget.children].forEach(x => x.setAttribute('aria-pressed', x === b));
+  render();
+});
+document.getElementById('scope').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  state.scope = b.dataset.s;
+  [...e.currentTarget.children].forEach(x => x.setAttribute('aria-pressed', x === b));
+  render();
+});
+document.getElementById('mvp').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  state.mvp = b.dataset.m;
+  [...e.currentTarget.children].forEach(x => x.setAttribute('aria-pressed', x === b));
+  render();
+});
+document.getElementById('q').addEventListener('input', e => { state.q = e.target.value; render(); });
+document.getElementById('expand').addEventListener('click', () =>
+  document.querySelectorAll('details.group').forEach(d => d.open = true));
+document.getElementById('collapse').addEventListener('click', () =>
+  document.querySelectorAll('details.group').forEach(d => d.open = false));
+
+// Dependency chips: reveal the target row wherever it lives, then flash it.
+document.addEventListener('click', e => {
+  const a = e.target.closest('a.dep'); if (!a) return;
+  e.preventDefault();
+  const id = a.dataset.jump, target = BY_ID[id];
+  if (!target) return;
+  if (!isPending(target) && state.scope !== 'all'){
+    document.querySelector('#scope button[data-s=all]').click();
+  }
+  if (state.q){ state.q = ''; document.getElementById('q').value = ''; render(); }
+  const tr = document.getElementById('r-' + id);
+  if (!tr) return;
+  tr.closest('details').open = true;
+  tr.scrollIntoView({behavior: 'smooth', block: 'center'});
+  document.querySelectorAll('tr.flash').forEach(x => x.classList.remove('flash'));
+  tr.classList.add('flash');
+});
+
+// Prefer the live CSV when served over http(s); fall back to the inline copy on file://.
+fetch('metrics/backlog.csv')
+  .then(r => r.ok ? r.text() : Promise.reject())
+  .then(boot)
+  .catch(() => boot(document.getElementById('csv').textContent));
+</script>
+</body></html>

@@ -12,9 +12,10 @@
  * Writes:
  *   docs/project/DASHBOARD.md
  *   docs/project/ROADMAP.md
+ *   docs/project/dashboard.html
  *   docs/project/metrics/snapshots.csv   (append/upsert today's row)
  *   docs/project/metrics/cycle-times.csv (overwrite)
- *   docs/project/metrics/backlog.csv     (overwrite)
+ *   docs/project/metrics/backlog.csv     (overwrite; also patches backlog.html's inline copy)
  *
  * Usage: node scripts/pm/generate-dashboard.mjs
  */
@@ -305,6 +306,7 @@ function main() {
     daysPerPoint,
   });
   writeRoadmap({ stories, epicsMeta, daysFor });
+  writeHtml({ counts, pctCount, pctPts, byEpic, epicsMeta });
   upsertSnapshot({ counts, donePts, totalPts, deliveredCount: delivered.length });
   writeCycleTimes({ calib, daysPerPoint });
   const backlogRows = writeBacklogCsv({ stories, epicsMeta });
@@ -561,6 +563,63 @@ function writeRoadmap({ stories, epicsMeta, daysFor }) {
   writeFileSync(join(PROJECT, "ROADMAP.md"), L.join("\n") + "\n");
 }
 
+function writeHtml({ counts, pctCount, pctPts, byEpic, epicsMeta }) {
+  const active = counts.plan + counts.build + counts.test + counts.pr + counts.deploy;
+  const epicRows = [...epicsMeta.entries()]
+    .map(([epic, meta]) => {
+      const e = byEpic.get(epic);
+      const act = e.list.filter((s) => s.status !== "archived");
+      const tp = act.reduce((a, s) => a + POINTS[s.size], 0);
+      const dp = act
+        .filter((s) => DELIVERED_STATUSES.has(s.status))
+        .reduce((a, s) => a + POINTS[s.size], 0);
+      const pct = tp ? Math.round((dp / tp) * 100) : 0;
+      const delivered = act.filter((s) => DELIVERED_STATUSES.has(s.status)).length;
+      if (!e.list.length) return "";
+      return `<tr><td>${epic}</td><td><span class="chip">${meta.status}</span></td><td class="barcell"><div class="track"><div class="fill" style="width:${pct}%"></div></div><span class="pct">${pct}%</span></td><td class="num">${delivered}/${act.length}</td></tr>`;
+    })
+    .join("");
+  const ring = (pct, label) =>
+    `<div class="ring" style="--p:${pct}"><div class="ring-inner"><span class="ring-pct">${pct}%</span><span class="ring-lbl">${label}</span></div></div>`;
+  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${PRODUCT_NAME} — Project Dashboard</title>
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--ink:#1c2530;--muted:#5b6b7d;--line:#e6eaef;--accent:#2f6feb;--good:#1f9d55;--warn:#c47f17;--bad:#c0392b}
+@media(prefers-color-scheme:dark){:root{--bg:#0f141a;--card:#161d26;--ink:#e6edf3;--muted:#9fb0c0;--line:#232c37;--accent:#5b8dff}}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+.wrap{max-width:960px;margin:0 auto;padding:28px 20px}
+h1{font-size:22px;margin:0 0 4px}.sub{color:var(--muted);font-size:13px;margin-bottom:22px}
+.cards{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;flex:1;min-width:150px}
+.card h3{margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.rings{display:flex;gap:22px;align-items:center;justify-content:center}
+.ring{--p:0;width:104px;height:104px;border-radius:50%;background:conic-gradient(var(--accent) calc(var(--p)*1%),var(--line) 0);display:grid;place-items:center}
+.ring-inner{width:78px;height:78px;border-radius:50%;background:var(--card);display:grid;place-items:center;text-align:center}
+.ring-pct{font-size:20px;font-weight:700}.ring-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}tr:last-child td{border-bottom:0}
+td.num{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.barcell{width:42%}.track{display:inline-block;width:calc(100% - 44px);height:8px;border-radius:6px;background:var(--line);vertical-align:middle;overflow:hidden}
+.fill{height:100%;background:var(--accent)}.pct{font-size:12px;color:var(--muted);margin-left:8px}
+.chip{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--line);color:var(--ink);white-space:nowrap}
+.foot{color:var(--muted);font-size:12px;margin-top:20px}
+</style></head><body><div class="wrap">
+<h1>${PRODUCT_NAME} — Project Dashboard</h1><div class="sub">Generated ${TODAY} · business/functional view · ${active} active stories</div>
+<div class="cards">
+<div class="card"><h3>Completion</h3><div class="rings">${ring(pctCount, "by count")}${ring(pctPts, "by effort")}</div></div>
+<div class="card"><h3>Pipeline</h3>
+<p style="margin:6px 0"><b style="font-size:26px">${counts.build + counts.test + counts.pr}</b> in progress</p>
+<p style="margin:6px 0"><b style="font-size:26px">${counts.plan}</b> in backlog</p>
+<p style="margin:6px 0;color:var(--muted)">${counts.deploy} delivered · ${counts.archived} archived</p></div>
+</div>
+<h3 style="font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Progress by epic</h3>
+<table><thead><tr><th>Epic</th><th>Capability</th><th>Progress (effort)</th><th class="num">Done</th></tr></thead><tbody>${epicRows}</tbody></table>
+<p class="foot">Derived from docs/stories/ + docs/project/epics.md. Refresh with <code>/pm-dashboard</code>.</p>
+</div></body></html>`;
+  writeFileSync(join(PROJECT, "dashboard.html"), html);
+}
+
 function readSnapshots() {
   const fp = join(METRICS, "snapshots.csv");
   if (!existsSync(fp)) return [];
@@ -718,10 +777,28 @@ export function backlogCsvText({ stories, epicsMeta }) {
   );
 }
 
+// backlog.html keeps an inline copy of the CSV so it still works when opened straight off disk
+// (browsers block fetch() on file://). Refresh it here, or it silently drifts from the real CSV.
+export function injectCsvIntoHtml(html, csv) {
+  const open = '<script id="csv" type="text/plain">';
+  const start = html.indexOf(open);
+  if (start === -1) return null;
+  const end = html.indexOf("<\/script>", start);
+  if (end === -1) return null;
+  return html.slice(0, start + open.length) + "\n" + csv + html.slice(end);
+}
+
 function writeBacklogCsv({ stories, epicsMeta }) {
   if (!existsSync(METRICS)) mkdirSync(METRICS, { recursive: true });
   const text = backlogCsvText({ stories, epicsMeta });
   writeFileSync(join(METRICS, "backlog.csv"), text);
+
+  const htmlPath = join(PROJECT, "backlog.html");
+  if (existsSync(htmlPath)) {
+    const updated = injectCsvIntoHtml(readFileSync(htmlPath, "utf8"), text);
+    if (updated) writeFileSync(htmlPath, updated);
+    else console.warn('warn: could not find the inline <script id="csv"> block in backlog.html');
+  }
   return text.trim().split("\n").length - 1;
 }
 

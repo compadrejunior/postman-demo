@@ -25,14 +25,23 @@ plain Node scripts against local files.
 2. Ensure the six story-stage folders exist:
    `docs/stories/{1. PLAN,2. BUILD,3. TEST,4. PR,5. DEPLOY,6. ARCHIVED}`.
 3. Ensure `docs/project/epics.md` exists with at least one canonical epic row.
-4. Run the local loop and report both summary lines:
+4. Ensure the static HTML viewers exist: `docs/project/backlog.html`, `docs/project/story.html`,
+   and `docs/project/vendor/marked.min.js`. Unlike `dashboard.html`, these are not
+   generated from scratch by `generate-dashboard.mjs` — `backlog.html` only has its
+   inline `<script id="csv">` block patched in place, and `story.html`/`vendor/` are
+   never touched by the generator at all. If any of the three is missing, scaffold it
+   from the same template `generate-dashboard.mjs`'s `injectCsvIntoHtml` expects (a
+   `<script id="csv" type="text/plain">…</script>` block in `backlog.html`), rather than
+   skipping it — a missing `backlog.html` means `check-docs.mjs` silently stops
+   validating its CSV fallback instead of failing.
+5. Run the local loop and report both summary lines:
 
    ```bash
    node scripts/pm/generate-dashboard.mjs
    node scripts/pm/check-docs.mjs
    ```
 
-5. If a story file predates the frontmatter convention, run
+6. If a story file predates the frontmatter convention, run
    `node scripts/pm/add-frontmatter.mjs` to backfill it, then fill in any placeholder
    `epic:` values by hand before regenerating.
 

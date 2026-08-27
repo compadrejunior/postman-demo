@@ -13,12 +13,19 @@
  *   - two story files share an id but sit in different stage folders
  *   - a story BODY re-declares metadata that belongs to frontmatter (Status/Priority/Epic/Depends On rows)
  *   - docs/project/metrics/backlog.csv is stale
+ *   - docs/project/backlog.html's inline CSV fallback is missing or stale
  *
  * Usage: node scripts/pm/check-docs.mjs
  */
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { loadEpics, loadStories, backlogCsvText, FOLDER_STATUS } from "./generate-dashboard.mjs";
+import {
+  loadEpics,
+  loadStories,
+  backlogCsvText,
+  injectCsvIntoHtml,
+  FOLDER_STATUS,
+} from "./generate-dashboard.mjs";
 import { loadConfig } from "../lib/config.mjs";
 
 // ============================================================================
@@ -30,6 +37,7 @@ const CWD = process.cwd();
 const CONFIG = loadConfig(CWD);
 const STORIES = CONFIG.dirs.stories;
 const BACKLOG_CSV = join(CONFIG.dirs.metrics, "backlog.csv");
+const BACKLOG_HTML = join(CONFIG.dirs.project, "backlog.html");
 const FOLDERS = Object.keys(FOLDER_STATUS);
 
 const SIZES = new Set(["S", "M", "L", "XL"]);
@@ -182,6 +190,20 @@ if (!existsSync(BACKLOG_CSV)) {
   errors.push(
     "docs/project/metrics/backlog.csv is STALE (or was hand-edited) — run: node scripts/pm/generate-dashboard.mjs",
   );
+}
+
+if (existsSync(BACKLOG_HTML)) {
+  const html = norm(readFileSync(BACKLOG_HTML, "utf8"));
+  const expectedHtml = injectCsvIntoHtml(html, expectedCsv);
+  if (expectedHtml === null) {
+    errors.push(
+      'docs/project/backlog.html: inline <script id="csv"> block not found — the offline fallback is broken',
+    );
+  } else if (expectedHtml !== html) {
+    errors.push(
+      "docs/project/backlog.html: its inline CSV copy is STALE — run: node scripts/pm/generate-dashboard.mjs",
+    );
+  }
 }
 
 // ---- report ----
