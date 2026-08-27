@@ -1,17 +1,18 @@
 # Task Management API — Roadmap & Timeline
 
-> **Generated 2026-08-26.** Delivered work with tracked dates is shown on the timeline; remaining work is projected forward. Do not edit by hand.
+> **Generated 2026-08-27.** Delivered work with tracked dates is shown on the timeline; remaining work is projected forward. Do not edit by hand.
 
 ## Business capability status
 
 | Capability status | Epics |
 |-------------------|-------|
 | Not started | Auth Enhancements, Task Query Enhancements |
-| In progress | Docker & Deploy Infrastructure, CI Pipeline, Project Process Adoption |
+| Done | Docker & Deploy Infrastructure, Project Process Adoption |
+| In progress | CI Pipeline |
 
 ## Forward plan
 
-> **Basis:** durations are **default** point-per-day estimates (no delivered stories have tracked dates yet). Single-team sequential assumption starting 2026-08-26. This is a projection, not a commitment.
+> **Basis:** durations are a mix of **observed** cycle times (from delivered stories) and defaults where samples are thin. Single-team sequential assumption starting 2026-08-27. This is a projection, not a commitment.
 
 ```mermaid
 gantt
@@ -19,29 +20,35 @@ gantt
     axisFormat %b %d
     title Remaining work (projected)
     section CI Pipeline
-    Enable branch protection requiring CI to pass before merge (S) :active, 2026-08-26, 2026-08-27
-    Add GitHub Actions CI workflow (lint/test/build) (S) :active, 2026-09-03, 2026-09-04
-    Add Docker image build/smoke-test job to CI (S) :active, 2026-09-04, 2026-09-05
-    section Docker & Deploy Infrastructure
-    Add multi-stage Dockerfile and .dockerignore (M) :active, 2026-08-27, 2026-08-30
-    Add docker-compose base + dev/test/prod overrides (M) :active, 2026-08-30, 2026-09-02
-    Document Docker workflows in docs/setup.md and README (S) :active, 2026-09-02, 2026-09-03
-    section Project Process Adoption
-    Adopt local Docket SDLC scaffolding (5-stage flow) (L) :active, 2026-09-05, 2026-09-10
-    Add story-advance skill and adapt generation scripts for 6-folder scheme (M) :active, 2026-09-10, 2026-09-13
+    Enable branch protection requiring CI to pass before merge (S) :active, 2026-08-27, 2026-08-28
     section Auth Enhancements
-    Add JWT refresh token endpoint (M) :2026-09-13, 2026-09-16
-    Support multiple concurrent refresh tokens per user (M) :2026-09-19, 2026-09-22
-    Revoke all sessions endpoint (S) :2026-09-22, 2026-09-23
+    Add JWT refresh token endpoint (M) :2026-08-28, 2026-08-29
+    Support multiple concurrent refresh tokens per user (M) :2026-08-30, 2026-08-31
+    Revoke all sessions endpoint (S) :2026-08-31, 2026-09-01
     section Task Query Enhancements
-    Add pagination to task list endpoints (M) :2026-09-16, 2026-09-19
-    Add status/priority filtering to task list endpoints (M) :2026-09-23, 2026-09-26
-    Add sort ordering to task list endpoints (S) :2026-09-26, 2026-09-27
+    Add pagination to task list endpoints (M) :2026-08-29, 2026-08-30
+    Add status/priority filtering to task list endpoints (M) :2026-09-01, 2026-09-02
+    Add sort ordering to task list endpoints (S) :2026-09-02, 2026-09-03
 ```
 
 ## Delivered timeline (tracked dates only)
 
-_No delivered stories have tracked start/deploy dates yet. Once stories move through the folders with real dates recorded, they appear here on the timeline and feed the cycle-time calibration._
+```mermaid
+gantt
+    dateFormat YYYY-MM-DD
+    axisFormat %b %d
+    title Delivered
+    section Docker & Deploy Infrastructure
+    Add multi-stage Dockerfile and .dockerignore :done, 2026-08-26, 2026-08-26
+    Add docker-compose base + dev/test/prod overrides :done, 2026-08-26, 2026-08-26
+    Document Docker workflows in docs/setup.md and README :done, 2026-08-26, 2026-08-26
+    section CI Pipeline
+    Add GitHub Actions CI workflow (lint/test/build) :done, 2026-08-26, 2026-08-26
+    Add Docker image build/smoke-test job to CI :done, 2026-08-26, 2026-08-26
+    section Project Process Adoption
+    Adopt local Docket SDLC scaffolding (5-stage flow) :done, 2026-08-26, 2026-08-26
+    Add story-advance skill and adapt generation scripts for 6-folder scheme :done, 2026-08-26, 2026-08-26
+```
 
 ---
 

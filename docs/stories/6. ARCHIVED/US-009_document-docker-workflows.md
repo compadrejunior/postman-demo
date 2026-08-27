@@ -9,8 +9,8 @@ depends_on: [US-008]
 started: 2026-08-26
 test_started: 2026-08-26
 pr_opened: 2026-08-26
-deployed:
-completed:
+deployed: 2026-08-26
+completed: 2026-08-26
 date_confidence: exact
 ---
 
