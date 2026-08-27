@@ -1,12 +1,19 @@
 $kind: http-request
 name: login
 method: POST
-url: "{{base_url}}/auth/login"
+url: "{{base_url}}/auth/login?login={{seed_user_email}}&password={{seed_user_password}}"
+queryParams:
+  - key: login
+    value: "{{seed_user_email}}"
+    disabled: false
+    description: ""
+  - key: password
+    value: "{{seed_user_password}}"
+    disabled: false
+    description: ""
 order: 2000
 description: |-
   Logs in and returns a JWT. On a `200` response, the afterResponse script below saves the token into the `auth_token` collection variable, so every subsequent request's `Authorization: Bearer {{auth_token}}` header is filled in automatically — run this before any of the task/admin requests.
-
-  The sample body authenticates the seeded regular user (`seed_user_email`/`seed_user_password` environment variables, populated by `npm run seed:dev`/`seed:test`/`seed:prod` — see docs/setup.md). To test the admin-only List All Tasks (Admin) request, swap in `{{seed_admin_email}}`/`{{seed_admin_password}}` before running Login.
 
   **Auth required:** no.
 
@@ -26,16 +33,32 @@ body:
   type: json
   content: |-
     {
-      "email": "{{seed_user_email}}",
-      "password": "{{seed_user_password}}"
+      "email": "ada@example.com",
+      "password": "password123"
     }
 scripts:
   - type: afterResponse
     code: |-
-      if (pm.response.code === 200) {
-        const json = pm.response.json();
-        if (json.token) {
-          pm.collectionVariables.set('auth_token', json.token);
-        }
+      pm.test('Status code is 200', function () {
+        pm.response.to.have.status(200);
+      });
+
+      const json = pm.response.json();
+
+      pm.test('Response contains token', function () {
+        pm.expect(json.token).to.be.a('string').and.not.empty;
+      });
+
+      pm.test('Response contains user details', function () {
+        pm.expect(json.user).to.be.an('object');
+        pm.expect(json.user.id).to.be.a('string').and.not.empty;
+        pm.expect(json.user.name).to.be.a('string').and.not.empty;
+        pm.expect(json.user.email).to.eql('ada@example.com');
+        pm.expect(json.user.role).to.be.oneOf(['user', 'admin']);
+      });
+
+      if (pm.response.code === 200 && json.token) {
+        pm.collectionVariables.set('auth_token', json.token);
+        pm.environment.set('auth_token', json.token);
       }
     language: text/javascript

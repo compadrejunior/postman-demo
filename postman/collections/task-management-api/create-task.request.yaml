@@ -39,9 +39,42 @@ scripts:
   - type: afterResponse
     language: text/javascript
     code: |-
+      pm.test('Status code is 201 or 401', function () {
+        pm.expect(pm.response.code).to.be.oneOf([201, 401]);
+      });
+
+      const contentType = pm.response.headers.get('Content-Type') || '';
+      pm.test('Response is JSON', function () {
+        pm.expect(contentType).to.include('application/json');
+      });
+
+      const json = pm.response.json();
+
       if (pm.response.code === 201) {
-        const json = pm.response.json();
+        pm.test('Created task has expected shape', function () {
+          pm.expect(json).to.be.an('object');
+          pm.expect(json.id).to.exist;
+          pm.expect(json.title).to.eql('Write tests');
+          pm.expect(json.description).to.eql('Add integration coverage');
+          pm.expect(json.status).to.eql('todo');
+          pm.expect(json.priority).to.eql('high');
+          pm.expect(json).to.have.property('createdAt');
+          pm.expect(json).to.have.property('updatedAt');
+        });
+
         if (json.id) {
           pm.collectionVariables.set('task_id', json.id);
         }
       }
+
+      if (pm.response.code === 401) {
+        pm.test('Unauthorized error has expected shape', function () {
+          pm.expect(json).to.have.property('error');
+          pm.expect(json.error.code).to.eql('UNAUTHENTICATED');
+          pm.expect(json.error.message).to.be.a('string').and.not.empty;
+        });
+      }
+
+      pm.test('Response time is under 1000ms', function () {
+        pm.expect(pm.response.responseTime).to.be.below(1000);
+      });
