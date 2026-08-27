@@ -1,0 +1,29 @@
+$kind: http-request
+method: POST
+url: '{{base_url}}/tasks'
+order: 3000
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: Authorization
+    value: 'Bearer {{auth_token}}'
+body:
+  type: json
+  content: |-
+    {
+      "title": "Write tests",
+      "description": "Add integration coverage",
+      "status": "todo",
+      "priority": "high",
+      "dueDate": null
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      if (pm.response.code === 201) {
+        const json = pm.response.json();
+        if (json.id) {
+          pm.collectionVariables.set('task_id', json.id);
+        }
+      }

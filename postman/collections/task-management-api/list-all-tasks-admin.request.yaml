@@ -1,0 +1,7 @@
+$kind: http-request
+method: GET
+url: '{{base_url}}/admin/tasks'
+order: 8000
+headers:
+  - key: Authorization
+    value: 'Bearer {{auth_token}}'

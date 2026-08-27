@@ -1,0 +1,11 @@
+$kind: collection
+name: 'Task Management API'
+description: |-
+  Collection generated from the implementation in this repository.
+variables:
+  - key: base_url
+    value: 'http://localhost:3000/api'
+  - key: auth_token
+    value: ''
+  - key: task_id
+    value: ''
