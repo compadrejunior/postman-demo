@@ -3,8 +3,11 @@
 # -f docker-compose.dev.yml up`.
 services:
   api:
+    image: postman-demo-api:dev
     build:
       target: build
+    env_file:
+      - .env
     environment:
       NODE_ENV: development
     command: npm run dev

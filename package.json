@@ -18,11 +18,11 @@
     "format": "prettier --write .",
     "pm:dashboard": "node scripts/pm/generate-dashboard.mjs",
     "pm:check": "node scripts/pm/check-docs.mjs",
-    "docker:dev": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up",
-    "docker:dev:down": "docker compose -f docker-compose.yml -f docker-compose.dev.yml down",
-    "docker:test": "docker compose -f docker-compose.yml -f docker-compose.test.yml run --rm api",
-    "docker:prod": "docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d",
-    "docker:prod:down": "docker compose -f docker-compose.yml -f docker-compose.prod.yml down",
+    "docker:dev": "docker compose --env-file .env -f docker-compose.yml -f docker-compose.dev.yml up --build",
+    "docker:dev:down": "docker compose --env-file .env -f docker-compose.yml -f docker-compose.dev.yml down",
+    "docker:test": "docker compose --env-file .env.test -f docker-compose.yml -f docker-compose.test.yml run --build --rm api",
+    "docker:prod": "docker compose --env-file .env.prod -f docker-compose.yml -f docker-compose.prod.yml up --build -d",
+    "docker:prod:down": "docker compose --env-file .env.prod -f docker-compose.yml -f docker-compose.prod.yml down",
     "prepare": "husky"
   },
   "repository": {

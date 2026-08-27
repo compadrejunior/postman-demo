@@ -16,11 +16,22 @@ This also runs `husky` (via the `prepare` script) to install the git hooks in `.
 
 ## Environment variables
 
-Copy `.env.example` to `.env` and fill in real values:
+There are three separate env files, one per environment — they are never merged or
+layered on top of each other:
+
+| File        | Environment | Copy from            |
+|-------------|-------------|------------------------|
+| `.env`      | Development | `.env.example`         |
+| `.env.test` | Test        | `.env.test.example`    |
+| `.env.prod` | Production  | `.env.prod.example`    |
 
 ```bash
 cp .env.example .env
+cp .env.test.example .env.test
+cp .env.prod.example .env.prod   # then replace JWT_SECRET with a real generated secret
 ```
+
+All three share the same variable set:
 
 | Variable            | Required | Default       | Notes                                                            |
 |---------------------|----------|---------------|-------------------------------------------------------------------|
@@ -33,7 +44,7 @@ cp .env.example .env
 
 `src/infrastructure/config/env.ts` validates these with Zod at startup and the process exits immediately if anything required is missing or malformed — this is deliberate fail-fast behavior, not something to work around.
 
-**Note:** `MONGODB_URI` was renamed from the historical `MONGDB_URI` typo. If you have an old `.env` using the typo'd name, rename the key — nothing else changes.
+**Note:** `MONGODB_URI` was renamed from the historical `MONGDB_URI` typo. If you have an old env file using the typo'd name, rename the key — nothing else changes.
 
 ## Run
 
@@ -55,6 +66,10 @@ with its own isolated named volume for Mongo data. All three use a shared base
 fail if run without the base file** (`service "mongo" has neither an image nor a build
 context specified`). Use the `npm run docker:*` scripts below, which always pass both
 files correctly, rather than invoking `docker compose` directly against one override file.
+
+Each environment reads its own env file — `.env` for dev, `.env.test` for test, `.env.prod`
+for prod (see Environment variables above) — and the `docker:*` scripts fail loudly if the
+matching file doesn't exist yet, so create it first.
 
 **Dev** — hot reload, bind-mounted source:
 
@@ -90,8 +105,8 @@ Stop it with `npm run docker:prod:down`.
 
 In every Docker environment, `MONGODB_URI` is overridden by the base compose file to
 point at the `mongo` service (`mongodb://mongo:27017/task-management`) rather than
-`localhost` — the value in your `.env` file only takes effect when running the API
-directly on the host, outside Compose.
+`localhost` — the value in your `.env`/`.env.test`/`.env.prod` file only takes effect
+when running the API directly on the host, outside Compose.
 
 ## Test
 
