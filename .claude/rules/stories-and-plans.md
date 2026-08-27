@@ -77,6 +77,15 @@ that can go stale.
 2. `2. BUILD` → `3. TEST` → `4. PR` → `5. DEPLOY`: move the file one stage at a time,
    stamping `test_started`, `pr_opened`, or `deployed` respectively, each with
    `date_confidence: exact`. Use `/story-advance` — it never skips a stage.
+
+   The `3. TEST` → `4. PR` move is knowable before the PR exists, so fold it into the
+   same branch/commit as the code being sent for review, before opening the PR — don't
+   let it become a follow-up PR whose only content is a file move. `4. PR` →
+   `5. DEPLOY` can't be folded that way (`deployed` is only true after merge); when it's
+   the only outstanding change, batch that stamp into whichever real PR comes next
+   rather than opening a dedicated PR just to move the file. See the "Avoid a PR that
+   exists only to move a file" section of the `story-advance` skill for the full
+   rationale.
 3. `5. DEPLOY` → `6. ARCHIVED`: move the file, stamp `completed` and
    `date_confidence: exact`. Use `/story-done`.
 4. Anything that will not be built → `6. ARCHIVED` directly, with the reason recorded

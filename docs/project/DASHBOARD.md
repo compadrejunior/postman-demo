@@ -4,18 +4,18 @@
 
 ## Overall progress
 
-- **By story count:** 0 of 7 delivered (Deploy or Archived) — **0%**  `░░░░░░░░░░░░░░░░░░░░`
-- **By effort (size points):** 0 of 15 pts — **0%**  `░░░░░░░░░░░░░░░░░░░░`
-- **Plan:** 6 · **Build:** 0 · **Test:** 1 · **PR:** 0 · **Deploy:** 0 · **Archived:** 7 (excluded from totals)
+- **By story count:** 1 of 7 delivered (Deploy or Archived) — **14%**  `███░░░░░░░░░░░░░░░░░`
+- **By effort (size points):** 1 of 15 pts — **7%**  `█░░░░░░░░░░░░░░░░░░░`
+- **Plan:** 6 · **Build:** 0 · **Test:** 0 · **PR:** 0 · **Deploy:** 1 · **Archived:** 7 (excluded from totals)
 
 ```mermaid
 pie showData
     title Story stage
     "Plan" : 6
     "Build" : 0
-    "Test" : 1
+    "Test" : 0
     "PR" : 0
-    "Deploy" : 0
+    "Deploy" : 1
 ```
 
 ## Burn-up
@@ -36,12 +36,12 @@ xychart-beta
 | Auth Enhancements | Not started | 0 | 0 | 0 | 0 | 3 | 0% | `░░░░░░░░░░░░` |
 | Task Query Enhancements | Not started | 0 | 0 | 0 | 0 | 3 | 0% | `░░░░░░░░░░░░` |
 | Docker & Deploy Infrastructure | Done | 0 | 0 | 0 | 0 | 0 | 0% | `░░░░░░░░░░░░` |
-| CI Pipeline | In progress | 0 | 0 | 1 | 0 | 0 | 0% | `░░░░░░░░░░░░` |
+| CI Pipeline | In progress | 1 | 0 | 0 | 0 | 0 | 100% | `████████████` |
 | Project Process Adoption | Done | 0 | 0 | 0 | 0 | 0 | 0% | `░░░░░░░░░░░░` |
 
 ## Now — in progress (Build / Test / PR)
 
-- **Enable branch protection requiring CI to pass before merge** — _CI Pipeline_ · S · stage: test
+_Nothing in progress._
 
 ## Next — top of the Plan backlog
 
@@ -52,7 +52,7 @@ xychart-beta
 - Add status/priority filtering to task list endpoints — _Task Query Enhancements_ · M · priority: medium
 - Add sort ordering to task list endpoints — _Task Query Enhancements_ · S · priority: low
 
-## Delivered — 0 in Deploy, 7 Archived
+## Delivered — 1 in Deploy, 7 Archived
 
 See [ROADMAP.md](ROADMAP.md) for the timeline and [How long stories actually take](#how-long-stories-actually-take).
 
@@ -62,7 +62,7 @@ _Measured end-to-end, from Build start to Deploy._
 
 | Size | Points (baseline) | Samples | Median days | Mean | Min | Max | Days/point | Basis |
 |------|------------------:|--------:|------------:|-----:|----:|----:|-----------:|-------|
-| S | 1 | 3 | 0 | 0 | 0 | 0 | 0 | observed |
+| S | 1 | 4 | 0 | 0.3 | 0 | 1 | 0 | observed |
 | M | 3 | 3 | 0 | 0 | 0 | 0 | 0 | observed |
 | L | 5 | 1 | 0 | 0 | 0 | 0 | 1 | default |
 | XL | 8 | 0 | — | — | — | — | 1 | default |
