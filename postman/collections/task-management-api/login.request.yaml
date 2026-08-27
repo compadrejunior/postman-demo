@@ -6,6 +6,8 @@ order: 2000
 description: |-
   Logs in and returns a JWT. On a `200` response, the afterResponse script below saves the token into the `auth_token` collection variable, so every subsequent request's `Authorization: Bearer {{auth_token}}` header is filled in automatically — run this before any of the task/admin requests.
 
+  The sample body authenticates the seeded regular user (`seed_user_email`/`seed_user_password` environment variables, populated by `npm run seed:dev`/`seed:test`/`seed:prod` — see docs/setup.md). To test the admin-only List All Tasks (Admin) request, swap in `{{seed_admin_email}}`/`{{seed_admin_password}}` before running Login.
+
   **Auth required:** no.
 
   **Body**
@@ -24,8 +26,8 @@ body:
   type: json
   content: |-
     {
-      "email": "ada@example.com",
-      "password": "password123"
+      "email": "{{seed_user_email}}",
+      "password": "{{seed_user_password}}"
     }
 scripts:
   - type: afterResponse

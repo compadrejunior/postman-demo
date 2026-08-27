@@ -3,7 +3,7 @@ method: GET
 url: '{{base_url}}/admin/tasks'
 order: 8000
 description: |-
-  Lists tasks across all users. Requires `auth_token` to be set for a user whose role is `admin` — a regular user's token gets a `403`. There is no self-service way to become an admin; see docs/setup.md for how to promote a user manually.
+  Lists tasks across all users. Requires `auth_token` to be set for a user whose role is `admin` — a regular user's token gets a `403`. There is no self-service way to become an admin; either run Login with `{{seed_admin_email}}`/`{{seed_admin_password}}` (populated by `npm run seed:dev`/`seed:test`/`seed:prod`), or promote a user manually — see docs/setup.md.
 
   **Auth required:** yes, and caller's role must be `admin`.
 
