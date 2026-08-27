@@ -2,12 +2,13 @@
 name: pm-dashboard
 description: >
   Regenerates every derived project artifact in docs/project/ — DASHBOARD.md,
-  ROADMAP.md, and docs/project/metrics/*.csv — from the story backlog
-  (docs/stories/**/*.md frontmatter) and docs/project/epics.md, then validates the
-  result. Use whenever a story moves between stage folders (1. PLAN / 2. BUILD /
-  3. TEST / 4. PR / 5. DEPLOY / 6. ARCHIVED), when frontmatter changes (epic, size,
-  priority, depends_on, any stage-transition date), or when the user asks to "update
-  the dashboard", "refresh the backlog", "regenerate the roadmap", or invokes
+  ROADMAP.md, dashboard.html, backlog.html's inline CSV copy, and
+  docs/project/metrics/*.csv — from the story backlog (docs/stories/**/*.md
+  frontmatter) and docs/project/epics.md, then validates the result. Use whenever a
+  story moves between stage folders (1. PLAN / 2. BUILD / 3. TEST / 4. PR /
+  5. DEPLOY / 6. ARCHIVED), when frontmatter changes (epic, size, priority,
+  depends_on, any stage-transition date), or when the user asks to "update the
+  dashboard", "refresh the backlog", "regenerate the roadmap", or invokes
   /pm-dashboard directly.
 ---
 
@@ -17,10 +18,11 @@ Regenerates every derived artifact under `docs/project/` from the one authored s
 truth: each story's YAML frontmatter under `docs/stories/{1. PLAN,2. BUILD,3. TEST,4. PR,
 5. DEPLOY,6. ARCHIVED}/`, plus the canonical epic list in `docs/project/epics.md`.
 
-**Never hand-edit** `DASHBOARD.md`, `ROADMAP.md`, or anything under
-`docs/project/metrics/`. If a number looks wrong, fix the story frontmatter or
-`epics.md` and regenerate. Patching the output does not survive the next run, and the
-validator cannot tell a hand-edit from staleness anyway, so both are rejected.
+**Never hand-edit** `DASHBOARD.md`, `ROADMAP.md`, `dashboard.html`, `backlog.html`'s
+inline `<script id="csv">` block, or anything under `docs/project/metrics/`. If a
+number looks wrong, fix the story frontmatter or `epics.md` and regenerate. Patching
+the output does not survive the next run, and the validator cannot tell a hand-edit
+from staleness anyway, so both are rejected.
 
 The full authoring contract — the frontmatter schema, dependency rules, when to stamp
 each stage-transition date — lives in
@@ -54,7 +56,12 @@ upstream Docket's `pm-dashboard`, this is a two-command, fully local loop.
   days-per-point estimation baseline.
 - **`ROADMAP.md`** — the business-capability table, a projected forward plan, and a
   delivered timeline built from tracked dates.
-- **`metrics/backlog.csv`** — the working backlog view.
+- **`dashboard.html`** — a self-contained static snapshot of the same progress view,
+  regenerated in full every run.
+- **`metrics/backlog.csv`** and the inline copy inside `backlog.html`. That inline copy
+  is a `file://`-safe fallback (`backlog.html` fetches the live CSV first and only falls
+  back to it); `backlog.html` itself is a static viewer, not regenerated — only its
+  inline CSV block is patched in place.
 - **`metrics/snapshots.csv`** — today's row upserted into the burn-up ledger.
 - **`metrics/cycle-times.csv`** — median, mean, min and max days per size, plus the
   points baseline and the observed days-per-point ratio.
