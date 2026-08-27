@@ -1,0 +1,7 @@
+$kind: http-request
+method: DELETE
+url: '{{base_url}}/tasks/{{task_id}}'
+order: 7000
+headers:
+  - key: Authorization
+    value: 'Bearer {{auth_token}}'
