@@ -783,7 +783,7 @@ export function injectCsvIntoHtml(html, csv) {
   const open = '<script id="csv" type="text/plain">';
   const start = html.indexOf(open);
   if (start === -1) return null;
-  const end = html.indexOf("<\/script>", start);
+  const end = html.indexOf("</script>", start);
   if (end === -1) return null;
   return html.slice(0, start + open.length) + "\n" + csv + html.slice(end);
 }
