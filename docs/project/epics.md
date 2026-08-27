@@ -21,9 +21,9 @@ Stories are sized S/M/L/XL. Points feed effort-weighted completion % and the roa
 |---|----------------|---------------------|--------|
 | 1 | Auth Enhancements | Refresh token issuance/revocation, logout | Not started |
 | 2 | Task Query Enhancements | Pagination and filtering on task list endpoints | Not started |
-| 3 | Docker & Deploy Infrastructure | Containerized Dev/Test/Prod environments for the API and MongoDB | In progress |
+| 3 | Docker & Deploy Infrastructure | Containerized Dev/Test/Prod environments for the API and MongoDB | Done |
 | 4 | CI Pipeline | Automated lint/test/build/image-build enforcement on every PR | In progress |
-| 5 | Project Process Adoption | Local Docket-based SDLC scaffolding (5-stage flow, dashboard, epics) | In progress |
+| 5 | Project Process Adoption | Local Docket-based SDLC scaffolding (5-stage flow, dashboard, epics) | Done |
 
 ---
 

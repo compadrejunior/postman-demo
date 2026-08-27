@@ -55,17 +55,12 @@ npm run dev
 
 ## Docker quickstart
 
-Both the API and MongoDB run as containers in dev, test, and prod, each environment with its own isolated Mongo data volume:
+Both the API and MongoDB run as containers in dev, test, and prod, each environment with its own isolated Mongo data volume. The `docker-compose.dev.yml`/`.test.yml`/`.prod.yml` files are overrides with no `image`/`build` of their own — always use the npm scripts below (or pass both `-f` flags yourself) rather than running one of those files alone:
 
 ```bash
-# Dev — hot reload, bind-mounted source
-docker compose -f docker-compose.yml -f docker-compose.dev.yml up
-
-# Test — clean-room, CI-parity run of the full test suite
-docker compose -f docker-compose.yml -f docker-compose.test.yml run --rm api
-
-# Prod — the production-shaped deployment
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+npm run docker:dev    # hot reload, bind-mounted source
+npm run docker:test   # clean-room, CI-parity run of the full test suite
+npm run docker:prod   # the production-shaped deployment
 ```
 
 See [docs/setup.md](docs/setup.md#running-with-docker) for details.
@@ -84,6 +79,9 @@ See [docs/setup.md](docs/setup.md#running-with-docker) for details.
 | `npm run format` | Format with Prettier |
 | `npm run pm:dashboard` | Regenerate the story dashboard/roadmap/metrics from `docs/stories/` |
 | `npm run pm:check` | Validate the story backlog (stale/hand-edited generated files, bad epics, dependency cycles) |
+| `npm run docker:dev` | Run the API + MongoDB in Docker with hot reload |
+| `npm run docker:test` | Run the full test suite in a clean-room Docker container |
+| `npm run docker:prod` | Run the production-shaped Docker deployment |
 
 ## Documentation
 

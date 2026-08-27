@@ -1,7 +1,13 @@
+# Override file — has no image/build context of its own for `mongo`. Never run this
+# file alone; use `npm run docker:test`, or `docker compose -f docker-compose.yml
+# -f docker-compose.test.yml run --rm api`.
 services:
   api:
+    image: postman-demo-api:test
     build:
       target: build
+    env_file:
+      - .env.test
     environment:
       NODE_ENV: test
       # mongodb-memory-server auto-detects the OS to pick a binary; Debian's own

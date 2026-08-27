@@ -1,8 +1,10 @@
 # Node packages
 node_modules
 
-## Environment Variables
+## Environment files
 .env
+.env.test
+.env.prod
 
 ## Build & test output
 dist
