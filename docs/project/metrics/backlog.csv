@@ -1,5 +1,5 @@
 id,title,epic,epic_no,status,priority,size,points,mvp,ready,depends_on,depended_by,started,test_started,pr_opened,deployed,completed,files
-US-012,Enable branch protection requiring CI to pass before merge,CI Pipeline,4,Build,Medium,S,1,No,Yes,US-010,,2026-08-26,,,,,2. BUILD/US-012_branch-protection-ci-required.md
+US-012,Enable branch protection requiring CI to pass before merge,CI Pipeline,4,Test,Medium,S,1,No,Yes,US-010,,2026-08-26,2026-08-27,,,,3. TEST/US-012_branch-protection-ci-required.md
 US-001,Add JWT refresh token endpoint,Auth Enhancements,1,Plan,High,M,3,Yes,Yes,,US-002;US-003,,,,,,1. PLAN/US-001_add-jwt-refresh-token-endpoint.md
 US-004,Add pagination to task list endpoints,Task Query Enhancements,2,Plan,High,M,3,Yes,Yes,,US-005;US-006,,,,,,1. PLAN/US-004_task-list-pagination.md
 US-002,Support multiple concurrent refresh tokens per user,Auth Enhancements,1,Plan,Medium,M,3,No,No,US-001,,,,,,,1. PLAN/US-002_multi-device-refresh-tokens.md

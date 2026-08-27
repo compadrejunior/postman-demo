@@ -7,7 +7,7 @@ priority: medium
 mvp: no
 depends_on: [US-010]
 started: 2026-08-26
-test_started:
+test_started: 2026-08-27
 pr_opened:
 deployed:
 completed:
