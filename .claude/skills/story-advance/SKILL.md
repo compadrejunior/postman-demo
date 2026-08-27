@@ -50,6 +50,26 @@ three intermediate stages under this project's 5-stage SDLC (see
 6. **Report** the story id, its title, the new stage, and (when moving into `5. DEPLOY`)
    which Docker Compose environment the deploy used.
 
+## Avoid a PR that exists only to move a file
+
+The `3. TEST` → `4. PR` transition is knowable *before* the PR exists — the date is
+"today," not something that depends on the PR actually being created. So when a story's
+code/docs are about to go into a PR, do this transition **on that same branch, in that
+same commit**, before running `gh pr create` (or opening the PR by hand). Move the file,
+stamp `pr_opened`, regenerate the dashboard, and commit it all alongside the real work —
+then open the PR from that commit. Don't do it as a follow-up once the PR already
+exists; that turns one PR into two for no reason, since nothing about the stamp actually
+depended on the PR existing first.
+
+`4. PR` → `5. DEPLOY` is the one transition that genuinely can't be folded in this way —
+`deployed` can only be true after the PR merges, so by definition it can't be stamped in
+the PR that causes it. When that's the only outstanding change, don't rush a dedicated
+PR just to move the file: fold the Deploy stamp (and the dashboard regen) into whichever
+real PR comes next, rather than treating "the file needs to move" as urgent enough to
+justify its own branch/PR/merge cycle on its own. If no other PR is imminent, it's fine
+to let the stamp wait — the dashboard being briefly behind reality is cheaper than a PR
+whose only content is a file move.
+
 ## What not to do
 
 Do not open a PR, push a branch, or run a `docker compose ... prod` deploy as a side
