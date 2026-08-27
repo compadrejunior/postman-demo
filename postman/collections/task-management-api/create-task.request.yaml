@@ -2,6 +2,24 @@ $kind: http-request
 method: POST
 url: '{{base_url}}/tasks'
 order: 3000
+description: |-
+  Creates a task owned by the caller. Requires `auth_token` to be set — run Login first. On a `201` response, the afterResponse script below saves the new task's id into the `task_id` collection variable, so Get/Update/Delete Task can use it right away.
+
+  **Auth required:** yes.
+
+  **Body**
+
+  | Field       | Type              | Notes                                                           |
+  |-------------|-------------------|-------------------------------------------------------------------|
+  | title       | string            | required, non-empty                                                |
+  | description | string            | optional, defaults to ""                                           |
+  | status      | string            | optional, one of todo/in-progress/done, defaults to todo           |
+  | priority    | string            | optional, one of low/medium/high, defaults to medium                |
+  | dueDate     | string or null    | optional, ISO 8601 date-time, defaults to null                     |
+
+  **Response `201`:** the created task (id, userId, title, description, status, priority, dueDate, createdAt, updatedAt).
+
+  **Errors:** `400` invalid body, `401` missing/invalid token.
 headers:
   - key: Content-Type
     value: application/json

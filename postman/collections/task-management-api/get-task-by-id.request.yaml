@@ -2,6 +2,16 @@ $kind: http-request
 method: GET
 url: '{{base_url}}/tasks/{{task_id}}'
 order: 5000
+description: |-
+  Fetches a single task by id. Requires `auth_token` to be set — run Login first, then Create Task to populate `task_id` (or set `task_id` manually to an existing task's id).
+
+  **Auth required:** yes.
+
+  **URL param:** `task_id` (path segment in the URL, filled in from the `task_id` collection variable).
+
+  **Response `200`:** the task (id, userId, title, description, status, priority, dueDate, createdAt, updatedAt).
+
+  **Errors:** `403` task belongs to another user and caller is not an admin, `404` no such task.
 headers:
   - key: Authorization
     value: 'Bearer {{auth_token}}'

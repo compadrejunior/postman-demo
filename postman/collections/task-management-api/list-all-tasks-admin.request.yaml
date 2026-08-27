@@ -2,6 +2,16 @@ $kind: http-request
 method: GET
 url: '{{base_url}}/admin/tasks'
 order: 8000
+description: |-
+  Lists tasks across all users. Requires `auth_token` to be set for a user whose role is `admin` — a regular user's token gets a `403`. There is no self-service way to become an admin; see docs/setup.md for how to promote a user manually.
+
+  **Auth required:** yes, and caller's role must be `admin`.
+
+  **Params/Body:** none.
+
+  **Response `200`:** array of tasks across all users (id, userId, title, description, status, priority, dueDate, createdAt, updatedAt).
+
+  **Errors:** `401` missing/invalid token, `403` caller is not an admin.
 headers:
   - key: Authorization
     value: 'Bearer {{auth_token}}'
