@@ -7,8 +7,8 @@ priority: high
 mvp: yes
 depends_on: [US-007]
 started: 2026-08-26
-test_started:
-pr_opened:
+test_started: 2026-08-26
+pr_opened: 2026-08-26
 deployed:
 completed:
 date_confidence: exact

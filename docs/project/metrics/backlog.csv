@@ -1,12 +1,12 @@
 id,title,epic,epic_no,status,priority,size,points,mvp,ready,depends_on,depended_by,started,test_started,pr_opened,deployed,completed,files
-US-007,Add multi-stage Dockerfile and .dockerignore,Docker & Deploy Infrastructure,3,Build,High,M,3,Yes,Yes,,US-008;US-011,2026-08-26,,,,,2. BUILD/US-007_dockerfile-and-dockerignore.md
-US-008,Add docker-compose base + dev/test/prod overrides,Docker & Deploy Infrastructure,3,Build,High,M,3,Yes,No,US-007,US-009,2026-08-26,,,,,2. BUILD/US-008_docker-compose-dev-test-prod.md
-US-010,Add GitHub Actions CI workflow (lint/test/build),CI Pipeline,4,Build,High,S,1,Yes,Yes,,US-011;US-012,2026-08-26,,,,,2. BUILD/US-010_ci-workflow-lint-test-build.md
-US-013,Adopt local Docket SDLC scaffolding (5-stage flow),Project Process Adoption,5,Build,High,L,5,Yes,Yes,,US-014,2026-08-26,,,,,2. BUILD/US-013_adopt-docket-sdlc-scaffolding.md
-US-014,Add story-advance skill and adapt generation scripts for 6-folder scheme,Project Process Adoption,5,Build,High,M,3,Yes,No,US-013,,2026-08-26,,,,,2. BUILD/US-014_story-advance-skill-and-scripts.md
-US-009,Document Docker workflows in docs/setup.md and README,Docker & Deploy Infrastructure,3,Build,Medium,S,1,No,No,US-008,,2026-08-26,,,,,2. BUILD/US-009_document-docker-workflows.md
-US-011,Add Docker image build/smoke-test job to CI,CI Pipeline,4,Build,Medium,S,1,No,No,US-007;US-010,,2026-08-26,,,,,2. BUILD/US-011_ci-docker-build-smoke-test.md
 US-012,Enable branch protection requiring CI to pass before merge,CI Pipeline,4,Build,Medium,S,1,No,No,US-010,,2026-08-26,,,,,2. BUILD/US-012_branch-protection-ci-required.md
+US-007,Add multi-stage Dockerfile and .dockerignore,Docker & Deploy Infrastructure,3,PR,High,M,3,Yes,Yes,,US-008;US-011,2026-08-26,2026-08-26,2026-08-26,,,4. PR/US-007_dockerfile-and-dockerignore.md
+US-008,Add docker-compose base + dev/test/prod overrides,Docker & Deploy Infrastructure,3,PR,High,M,3,Yes,No,US-007,US-009,2026-08-26,2026-08-26,2026-08-26,,,4. PR/US-008_docker-compose-dev-test-prod.md
+US-010,Add GitHub Actions CI workflow (lint/test/build),CI Pipeline,4,PR,High,S,1,Yes,Yes,,US-011;US-012,2026-08-26,2026-08-26,2026-08-26,,,4. PR/US-010_ci-workflow-lint-test-build.md
+US-013,Adopt local Docket SDLC scaffolding (5-stage flow),Project Process Adoption,5,PR,High,L,5,Yes,Yes,,US-014,2026-08-26,2026-08-26,2026-08-26,,,4. PR/US-013_adopt-docket-sdlc-scaffolding.md
+US-014,Add story-advance skill and adapt generation scripts for 6-folder scheme,Project Process Adoption,5,PR,High,M,3,Yes,No,US-013,,2026-08-26,2026-08-26,2026-08-26,,,4. PR/US-014_story-advance-skill-and-scripts.md
+US-009,Document Docker workflows in docs/setup.md and README,Docker & Deploy Infrastructure,3,PR,Medium,S,1,No,No,US-008,,2026-08-26,2026-08-26,2026-08-26,,,4. PR/US-009_document-docker-workflows.md
+US-011,Add Docker image build/smoke-test job to CI,CI Pipeline,4,PR,Medium,S,1,No,No,US-007;US-010,,2026-08-26,2026-08-26,2026-08-26,,,4. PR/US-011_ci-docker-build-smoke-test.md
 US-001,Add JWT refresh token endpoint,Auth Enhancements,1,Plan,High,M,3,Yes,Yes,,US-002;US-003,,,,,,1. PLAN/US-001_add-jwt-refresh-token-endpoint.md
 US-004,Add pagination to task list endpoints,Task Query Enhancements,2,Plan,High,M,3,Yes,Yes,,US-005;US-006,,,,,,1. PLAN/US-004_task-list-pagination.md
 US-002,Support multiple concurrent refresh tokens per user,Auth Enhancements,1,Plan,Medium,M,3,No,No,US-001,,,,,,,1. PLAN/US-002_multi-device-refresh-tokens.md
