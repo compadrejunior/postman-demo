@@ -28,3 +28,7 @@ As in stock Docket, a story's status is which folder it physically sits in under
 - `/story-done` — Deploy → Archived, the final closure.
 - `/pm-dashboard` — regenerate `DASHBOARD.md`, `ROADMAP.md`, and the metrics CSVs from the story backlog; run after any story move.
 - `npm run pm:dashboard` / `npm run pm:check` — the same generation/validation, runnable without Claude Code.
+
+## Branch protection
+
+`master` has a GitHub branch protection rule requiring the `test` and `docker` jobs from `.github/workflows/ci.yml` to pass before a PR can be merged, enforced for all contributors including repository admins. This is a GitHub repository-settings change, not a file in this repository — it's configured via the GitHub API/UI, not tracked as code. There is no `develop` branch in this repository, so no equivalent rule exists for it.

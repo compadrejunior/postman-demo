@@ -6,14 +6,14 @@
 
 - **By story count:** 0 of 7 delivered (Deploy or Archived) — **0%**  `░░░░░░░░░░░░░░░░░░░░`
 - **By effort (size points):** 0 of 15 pts — **0%**  `░░░░░░░░░░░░░░░░░░░░`
-- **Plan:** 6 · **Build:** 1 · **Test:** 0 · **PR:** 0 · **Deploy:** 0 · **Archived:** 7 (excluded from totals)
+- **Plan:** 6 · **Build:** 0 · **Test:** 1 · **PR:** 0 · **Deploy:** 0 · **Archived:** 7 (excluded from totals)
 
 ```mermaid
 pie showData
     title Story stage
     "Plan" : 6
-    "Build" : 1
-    "Test" : 0
+    "Build" : 0
+    "Test" : 1
     "PR" : 0
     "Deploy" : 0
 ```
@@ -36,12 +36,12 @@ xychart-beta
 | Auth Enhancements | Not started | 0 | 0 | 0 | 0 | 3 | 0% | `░░░░░░░░░░░░` |
 | Task Query Enhancements | Not started | 0 | 0 | 0 | 0 | 3 | 0% | `░░░░░░░░░░░░` |
 | Docker & Deploy Infrastructure | Done | 0 | 0 | 0 | 0 | 0 | 0% | `░░░░░░░░░░░░` |
-| CI Pipeline | In progress | 0 | 0 | 0 | 1 | 0 | 0% | `░░░░░░░░░░░░` |
+| CI Pipeline | In progress | 0 | 0 | 1 | 0 | 0 | 0% | `░░░░░░░░░░░░` |
 | Project Process Adoption | Done | 0 | 0 | 0 | 0 | 0 | 0% | `░░░░░░░░░░░░` |
 
 ## Now — in progress (Build / Test / PR)
 
-- **Enable branch protection requiring CI to pass before merge** — _CI Pipeline_ · S · stage: build
+- **Enable branch protection requiring CI to pass before merge** — _CI Pipeline_ · S · stage: test
 
 ## Next — top of the Plan backlog
 
