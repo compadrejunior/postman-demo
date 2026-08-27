@@ -5,6 +5,8 @@ order: 1000
 description: |-
   Registers a new user. Always creates a `"user"` role — there is no self-service way to become an admin (see docs/setup.md).
 
+  The sample body deliberately uses an email distinct from the seeded users (`seed_user_email`/`seed_admin_email`, populated by `npm run seed:dev`/`seed:test`/`seed:prod`) — registering with an already-seeded email returns `409`. Edit the email in the sample body if you re-run this request more than once, since the email is unique per environment's database.
+
   **Auth required:** no.
 
   **Body**
@@ -25,7 +27,7 @@ body:
   type: json
   content: |-
     {
-      "name": "Ada",
-      "email": "ada@example.com",
-      "password": "password123"
+      "name": "New User",
+      "email": "newuser@example.com",
+      "password": "{{seed_user_password}}"
     }

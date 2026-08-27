@@ -12,3 +12,23 @@ values:
     value: ''
     type: default
     enabled: true
+  - key: seed_user_email
+    value: 'ada@example.com'
+    type: default
+    enabled: true
+  - key: seed_user_password
+    value: 'password123'
+    type: secret
+    enabled: true
+  - key: seed_other_user_email
+    value: 'grace@example.com'
+    type: default
+    enabled: true
+  - key: seed_admin_email
+    value: 'admin@example.com'
+    type: default
+    enabled: true
+  - key: seed_admin_password
+    value: 'adminpass123'
+    type: secret
+    enabled: true
